@@ -1,0 +1,8 @@
+- name: Door Bell
+  platform: slack
+  api_key: !secret slack_api_key
+  default_channel: '#general'
+- name: parents
+  platform: group
+  services:
+    - service: ios_iphonejurgen

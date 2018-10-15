@@ -1,0 +1,255 @@
+- trigger:
+    platform: time
+    at: '19:20:00'
+  action:
+    service: light.turn_on
+    entity_id: light.tradfri_bulb_e27_ws_opal_980lm_3
+    data:
+      transition: 900
+  alias: Morning wake up
+  id: eaa60920c2754160b313dbf8f564425b
+- action:
+  - data:
+      language: nl
+      message: Welkom thuis Kristel, Ik hoop dat je een leuke dag hebt gehad!
+    service: tts.google_say
+    entity_id: media_player.bathroom
+  alias: Kristel komt thuis
+  condition:
+  - condition: state
+    entity_id: media_player._ue55es6300
+    state: 'off'
+  - condition: state
+    entity_id: media_player.playroom
+    state: 'off'
+  id: '1519147879498'
+  trigger:
+  - entity_id: device_tracker.84b153e4f5e9
+    from: not_home
+    platform: state
+    to: home
+- action:
+  - data:
+      message: Fuck it is cold in the basement
+    service: notify.ios_iphonejurgen
+  alias: Te koud in de kelder
+  condition: []
+  id: '1519431488726'
+  trigger:
+  - below: '5'
+    entity_id: sensor.basement_temperature
+    platform: numeric_state
+- action:
+  - data:
+      entity_id: switch.verwarming
+    service: switch.turn_on
+  alias: Verwarming keuken aan
+  condition:
+  - below: '19'
+    condition: numeric_state
+    entity_id: sensor.kitchen_temperature
+  - condition: template
+    value_template: '{% if now().hour > 5 and now().hour < 23 %}true{% endif %}'
+  id: '1519681837475'
+  trigger:
+  - platform: time
+    minutes: /1
+    seconds: 0
+- action:
+  - data:
+      entity_id: switch.verwarming
+    service: switch.turn_off
+  alias: Verwarming keuken uit
+  condition: []
+  id: '1519682083455'
+  trigger:
+  - above: '21'
+    entity_id: sensor.kitchen_temperature
+    platform: numeric_state
+- action:
+  - data:
+      entity_id: media_player.tv
+    service: media_player.turn_off
+  alias: check of tv nog aan staat en zet m uit
+  condition:
+  - condition: state
+    entity_id: media_player.tv
+    state: 'on'
+  id: '1519684335894'
+  trigger:
+  - at: 00:00
+    platform: time
+- action:
+  - data:
+      entity_id: group.kitchen_lights
+    service: switch.turn_off
+  - data:
+      entity_id: media_player.playroom
+    service: media_player.media_stop
+  alias: switch off kitchen lights when tv off at night
+  condition:
+  - after: '20:00'
+    condition: time
+  id: '1521486165631'
+  trigger:
+  - entity_id: media_player.tv
+    from: 'on'
+    platform: state
+    to: 'off'
+- action:
+  - data:
+      entity_id: light.tradfri_bulb_e27_ws_opal_980lm_2
+    service: light.turn_off
+  alias: morning bathroom prep
+  condition:
+  - before: '15:30'
+    condition: time
+  id: '1522148187835'
+  trigger:
+  - entity_id: media_player.bathroom
+    from: playing
+    platform: state
+    to: paused
+- id: '1531988181633'
+  alias: Door Bell
+  trigger:
+  - entity_id: switch.frontdoor_bell
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: Someone at the door
+    service: notify.ios_iphonejurgen
+- id: '1534248427037'
+  alias: Stop James when Door is open
+  trigger:
+  - entity_id: binary_sensor.office_door
+    from: closed
+    platform: state
+    to: open
+  condition:
+  - condition: state
+    entity_id: vacuum.james
+    state: 'on'
+  action:
+  - data:
+      entitity_id: vacuum.james
+    service: vacuum.turn_off
+- id: '1535556871451'
+  alias: James changes status
+  trigger:
+  - entity_id: sensor.james_status
+    platform: state
+  condition: []
+  action:
+  - data:
+      message: 'James says: {{ sensor.james_status }}'
+    service: notify.ios_iphonejurgen
+- id: '1535656975175'
+  alias: Enable passage light when first floor door opens and is dark
+  trigger:
+  - entity_id: binary_sensor.office_door
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.maries_bedroom
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: switch.passage_light
+    service: switch.turn_on
+- id: '1535798616340'
+  alias: Switch Off Passage Light After Delay
+  trigger:
+  - entity_id: switch.passage_light
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: script.1535797410021
+    service: script.turn_on
+- id: '1535798616341'
+  alias: Switch Off Living Front Light After Delay
+  trigger:
+  - entity_id: switch.living_front_light
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      entity_id: script.1535797410022
+    service: script.turn_on
+- id: '1536006362180'
+  alias: Rain / Velux
+  trigger:
+  - entity_id: sensor.pws_weather
+    platform: state
+    to: rainy
+  condition:
+  - condition: state
+    entity_id: group.velux_windows
+    state: 'On'
+  action:
+  - data:
+      entity_id: light.tradfri_bulb_e27_ws_opal_980lm
+    service: light.turn_on
+- id: '1537899764510'
+  alias: Tessie Start Charging Weekdays
+  trigger:
+  - at: '21:05'
+    platform: time
+  condition:
+  - condition: zone
+    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
+    zone: zone.home
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+  - data:
+      entity_id: switch.tesla_model_s_5yjsa7e26jf260737_charger_switch
+    service: switch.turn_on
+- id: '1537899764511'
+  alias: Tessie Stop Charging Weekdays
+  trigger:
+  - at: 05:55
+    platform: time
+  condition:
+  - condition: zone
+    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
+    zone: zone.home
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  action:
+  - data:
+      entity_id: switch.tesla_model_s_5yjsa7e26jf260737_charger_switch
+    service: switch.turn_off
+- id: '1537902156299'
+  alias: Tessie Weekday Morning Prep
+  trigger:
+  - at: '21:04'
+    platform: time
+  condition:
+  - condition: state
+    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
+    state: Home
+  action:
+  - data:
+      entity_id: climate.tesla_model_s_5yjsa7e26jf260737_hvac_climate_system
+      temperature: 21
+    service: climate.set_temperature

@@ -1,0 +1,25 @@
+- platform: mqtt
+  name: "Frontdoor Bell"
+  state_topic: "stat/switchboard/POWER"
+  command_topic: "cmd/frontdoor/POWER/set"
+  payload_on: "ON"
+  payload_off: "OFF"
+  icon: mdi:doorbell-video
+- platform: rest
+  name: "Passage Light"
+  scan_interval: 10
+  resource: http://192.168.50.61/relay/0
+  body_on: 'turn=on'
+  body_off: 'turn=off'
+  is_on_template: '{{ value_json.ison == true}}'
+  headers:
+    content-type: application/x-www-form-urlencoded
+- platform: rest
+  name: "Living Front Light"
+  scan_interval: 10
+  resource: http://192.168.50.64/relay/0
+  body_on: 'turn=on'
+  body_off: 'turn=off'
+  is_on_template: '{{ value_json.ison == true}}'
+  headers:
+    content-type: application/x-www-form-urlencoded

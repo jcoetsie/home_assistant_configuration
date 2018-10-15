@@ -1,0 +1,11 @@
+push:
+  categories:
+    - name: Dist bin full
+      identifier: 'james_is_full'
+      actions:
+        - identifier: 'JAMES_IS_FULL'
+          title: 'James says he is full, please empty his belly!'
+          activationMode: 'background'
+          authenticationRequired: yes
+          destructive: yes
+          behavior: 'default'

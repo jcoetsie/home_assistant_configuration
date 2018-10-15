@@ -1,0 +1,92 @@
+
+- cal_id: marlin-ops.com_9u8b70hl6840mpr30goo25elss@group.calendar.google.com
+  entities:
+  - device_id: holidayssickness
+    name: Holidays/Sickness
+    track: true
+
+- cal_id: jurgen.coetsiers@marlin-ops.com
+  entities:
+  - device_id: jurgencoetsiersmarlinopscom
+    name: jurgen.coetsiers@marlin-ops.com
+    track: false
+
+- cal_id: b-sprouts.com_n554k5mkpckqm1jeogu5n9trd8@group.calendar.google.com
+  entities:
+  - device_id: bsprouts_program_agenda
+    name: B-Sprouts Program Agenda
+    track: false
+
+- cal_id: pascal.binard@marlin-ops.com
+  entities:
+  - device_id: pascalbinardmarlinopscom
+    name: pascal.binard@marlin-ops.com
+    track: false
+
+- cal_id: ia56u50g1cb46rvhp8b6q0q084@group.calendar.google.com
+  entities:
+  - device_id: appartement_zee
+    name: Appartement Zee
+    track: false
+
+- cal_id: tueae6mj8f6rti4l5kfs4qca9jt8bqfb@import.calendar.google.com
+  entities:
+  - device_id: leerlingenkalender
+    name: leerlingenkalender
+    track: false
+
+- cal_id: '#contacts@group.v.calendar.google.com'
+  entities:
+  - device_id: contacts
+    name: Contacts
+    track: false
+
+- cal_id: nl.be#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: feestdagen_in_belgie
+    name: "Feestdagen in Belgi\xEB"
+    track: true
+
+- cal_id: belg2_23967_%41alst#sports@group.v.calendar.google.com
+  entities:
+  - device_id: aalst
+    name: Aalst
+    track: false
+
+- cal_id: p#weeknum@group.v.calendar.google.com
+  entities:
+  - device_id: week_numbers
+    name: Week Numbers
+    track: false
+
+- cal_id: marlin-ops.com_etf7cliea1o7srghblgrisn38c@group.calendar.google.com
+  entities:
+  - device_id: ilva
+    name: ILVA
+    track: true
+  - device_id: PMD
+    name: PMD
+    search: "Ophaling PMD"
+    track: true
+  - device_id: GFT
+    name: GFT
+    search: "Ophaling GFT"
+    track: true
+  - device_id: Glas
+    name: Glas
+    search: "Ophaling Glas"
+    track: true
+  - device_id: Huisvuil
+    name: Huisvuil
+    search: "Ophaling Huisvuil"
+    track: true
+  - device_id: Papier
+    name: Papier
+    search: "Ophaling Papier"
+    track: true
+- cal_id: en.be#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: holidays_in_belgium
+    ignore_availability: true
+    name: Holidays in Belgium
+    track: true

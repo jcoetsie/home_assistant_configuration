@@ -1,0 +1,22 @@
+switch.isle_light:
+  friendly_name: kitchen isle light
+  icon: mdi:spotlight-beam
+switch.work_light:
+  friendly_name: kitchen work light
+  icon: mdi:spotlight-beam
+switch.table_light:
+  friendly_name: kitchen table light
+  icon: mdi:ceiling-light
+switch.coffee_light:
+  friendly_name: coffee light
+  icon: mdi:spotlight-beam
+light.tradfri_bulb_e27_ws_opal_980lm:
+  friendly_name: master bedroom light
+sensor.weather_minimum:
+  icon: mdi:thermometer
+sensor.weather_maximum:
+  icon: mdi:thermometer
+light.tradfri_bulb_e27_ws_opal_980lm_3:
+  friendly_name: Bed Side Light
+light.tradfri_bulb_e27_cws_opal_600lm:
+  friendly_name: Living Lamp

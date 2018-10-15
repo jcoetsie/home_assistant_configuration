@@ -1,0 +1,301 @@
+#tradfri: Jjalj36O1p9nxiim
+
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_lat
+  longitude: !secret home_lon
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 17
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Brussels
+  # Customization file
+  customize: !include customize.yaml
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks  
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+
+influxdb:
+
+# Enables configuration UI
+config:
+
+google:
+  client_id: !secret google_client_id
+  client_secret: !secret google_client_secret
+
+http:
+  base_url: !secret base_url
+  trusted_networks:
+    - 192.168.50.0/24
+    - 192.168.20.1
+    - 127.0.0.1
+  ip_ban_enabled: True
+  login_attempts_threshold: 10
+  #api_password: Kristel99
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+neato:
+  username: !secret neato_username
+  password: !secret neato_password
+
+# Weather prediction
+sensor: !include sensors.yaml
+
+alert: !include alert.yaml
+
+apple_tv:
+  - host: 192.168.50.63
+    login_id: !secret apple_tv_login_id
+    name: Bedroom TV
+    start_off: true
+    credentials: CREDENTIALS_1
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+device_tracker:
+
+recorder:
+  db_url: !secret mariadb_db_url
+  # Tracked history is kept for 1000 days
+  purge_keep_days: 1000
+
+ifttt:
+  key: !secret ifttt_key
+
+mqtt:
+  broker: core-mosquitto
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  discovery: true
+  discovery_prefix: homeassistant
+
+media_player:
+  # - platform: cast
+  #   host: 192.168.50.52
+  #   mac: 08:9e:08:37:7f:6d
+  # # - platform: spotify
+  # #   client_id: 88f5dd180edd4603afe9e3e459d01fc0
+  # #   client_secret: b381f3cb33f046d1b702b8e7dfb8c96e
+  #   #aliases:
+  #   #    abc123def456: 'Living Room'
+  #   #    9183abas000: 'Bed Room'
+  - platform: samsungtv
+    name: tv
+    host: 192.168.50.53
+    mac: dc:71:44:6f:4e:f5
+  # - platform: plex
+  #   entity_namespace: 'plex'
+  #   include_non_clients: true
+  #   scan_interval: 5
+  #   show_all_controls: false
+  #   use_custom_entity_ids: true
+  #   use_episode_art: true
+  # - platform: sonos
+    #interface_addr: 192.168.50.56
+
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: http://hassio.local:3218
+  sonweb:
+    title: SonWEB
+    icon: mdi:lightbulb-on
+    url: http://hassio.local:9541
+
+switch: !include switches.yaml
+
+group: !include groups.yaml
+automation: !include automations.yaml
+automation old: !include manual_automations.yaml
+
+script: !include scripts.yaml
+
+
+binary_sensor:
+  - platform: mqtt
+    name: "Basement lwt"
+    state_topic: "tele/basement/LWT"
+    value_template: "{{ value }}"
+    payload_on: "Online"
+    payload_off: "Offline"
+    device_class: connectivity
+  - platform: mqtt
+    name: "Office Door"
+    state_topic: "home/RFGator/SRFBtoMQTT" # defined by subjectGTWRFtoMQTT in User_config.h
+    #command_topic: "home/commands/RFGator/PLSL_180/433_1"
+    payload_on: "8680202"
+    payload_off: "8680206"
+    device_class: door
+    #optimistic: false
+    #retain: true
+  - platform: mqtt
+    name: "Velux Front Left"
+    state_topic: "home/RFGator/SRFBtoMQTT" # defined by subjectGTWRFtoMQTT in User_config.h
+    payload_on: "14537482"
+    payload_off: "14537486"
+    device_class: window
+    optimistic: false
+    retain: true
+  - platform: mqtt
+    name: "Velux Front Right"
+    state_topic: "home/RFGator/SRFBtoMQTT" # defined by subjectGTWRFtoMQTT in User_config.h
+    payload_on: "13186314"
+    payload_off: "13186318"
+    device_class: window
+    optimistic: false
+    retain: true
+  - platform: mqtt
+    name: "Marie's Bedroom"
+    state_topic: "home/RFGator/SRFBtoMQTT" # defined by subjectGTWRFtoMQTT in User_config.h
+    payload_off: "16029454"
+    payload_on: "16029450"
+    device_class: door
+    optimistic: false
+    retain: true
+  - platform: mqtt
+    name: "Office Motion"
+    state_topic: "home/RFGator/SRFBtoMQTT" # defined by subjectGTWRFtoMQTT in User_config.h
+#    payload_off: "16029454"
+    payload_on: "9849356"
+    device_class: motion
+    optimistic: false
+    retain: false
+
+ios: !include ios.yaml
+
+remote: !include remote.yaml
+
+
+light:
+  - platform: mqtt
+    name: Office Lights
+    command_topic: "cmnd/office/POWER1"
+    state_topic: "stat/office/POWER1"
+  - platform: mqtt
+    name: Office Bathroom Light
+    command_topic: "cmnd/office/POWER2"
+    state_topic: "stat/office/POWER2"
+  - platform: mqtt
+    name: Office Bathroom Vanity Light
+    command_topic: "cmnd/office/POWER3"
+    state_topic: "stat/office/POWER3"
+
+
+tradfri:
+  host: 192.168.50.60
+tesla:
+  username: !secret tesla_username
+  password: !secret tesla_password
+zone:
+  - name: SJS
+    latitude: 50.9239978
+    longitude: 3.973927099999969
+    radius: 250
+    icon: mdi:school
+
+  - name: De Stip
+    icon: mdi:school
+    latitude: 50.912052
+    longitude: 4.078944
+    radius: 100
+
+  # This will override the default home zone
+  - name: Home
+    latitude: !secret home_lat
+    longitude: !secret home_lon
+    radius: 100
+    icon: mdi:home
+
+  - name: Zee
+    latitude: 51.14022254322524
+    longitude: 2.738159867645436
+    radius: 100
+    icon: mdi:boat
+notify: !include notify.yaml
+
+input_number:                                                                                                      
+  slider_passage_delay:                                                                                                         
+    name: Passage Light Timer
+    unit_of_measurement: "Minutes"
+    icon: mdi:av-timer                                                                             
+    initial: 3                                                                                                    
+    min: 1
+    max: 15
+    step: 1
+input_boolean:
+  passage_light_timer:
+    name: Passage Light Timer
+    initial: on
+    icon: mdi:counter
+  living_front_light_timer:
+    name: Living light timer
+    initial: on
+    icon: mdi:counter
+  enable_tessie_autoloading:
+    name: Tessie Loading On
+    initial: on
+    icon: mdi:battery-charging-outline
+climate:
+  - platform: atagone
+    name: Atag One Thermostat
+    host: 192.168.50.65
+    port: 10000
+    scan_interval: 10
+    resources:
+      - room_temp
+      - outside_temp
+      - avg_outside_temp
+      - pcb_temp
+      - ch_setpoint
+      - ch_water_pressure
+      - ch_water_temp
+      - ch_return_temp
+      - dhw_water_temp
+      - dhw_water_pres
+      - boiler_status
+      - boiler_config

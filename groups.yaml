@@ -1,0 +1,209 @@
+#### groups.yaml ####
+
+######################## VIEWS (Tabs) ########################
+## DEFUALT VIEW - HOME##
+
+default_view:
+  name: Home
+  view: yes
+  entities:
+   # - sensor.ssl_cert_expiry
+   # - sensor.hallway_thermostat_house_temperature
+   # - sensor.nest_away_mode
+    - group.kitchen_lights
+    - group.master_bedroom_lights
+    - group.weather
+    - group.garbage_collection
+    - script.1521490428724
+    - media_player.playroom
+    - sensor.office_travel_time
+    - sensor.sjs_travel_time
+    - sensor.de_stip_travel_time
+    - sensor.basement_humidity
+    - switch.frontdoor_bell
+living:
+  name: Living
+  view: yes
+  entities:
+    - media_player.tv
+    - light.tradfri_bulb_e27_cws_opal_600lm
+    - switch.living_front_light
+    - group.living_settings
+master_bedroom_view:
+  name: Master Bedroom
+  view: yes
+  entities:
+    # - sensor.portable_sensor_3_temperature
+    # - sensor.temp_humid_3_humidity
+    #- media_player.master_bedroom
+    - media_player.bathroom
+    - group.master_bedroom_lights
+    - group.passage_light
+    #- group.laurastar_iron
+marie_bedroom_view:
+  name: Maries's Bedroom
+  view: yes
+  entities:
+    - group.maries_bedroom_status
+    - group.passage_light
+basement:
+  name: Basement
+  view: yes
+  entities:
+    - sensor.basement_humidity
+    - sensor.basement_temperature
+    - switch.basement
+garage:
+    name: Garage/Storage
+    view: yes
+    entities: 
+      - sensor.garage_temperature
+      - sensor.garage_humidity
+      - switch.frontdoor_bell
+office:
+    name: Office
+    view: yes
+    entities:
+      - group.office_cleaning
+      - group.office_doors_and_windows
+      - light.office_lights
+      - light.office_bathroom_light
+      - light.office_bathroom_vanity_light
+
+tessie:
+    name: Tessie
+    view: yes
+    entities:
+      - group.tessie_status
+      - group.tessie_climate
+      - group.tessie_battery
+      - group.tessie_charging
+system:
+    name: System
+    view: yes
+climate:
+    name: Climate
+    view: yes
+    entities:
+      - group.weather
+      - climate.atag_one_thermostat
+      - sensor.atagone_room_temp
+      - sensor.atagone_outside_temp
+      - sensor.atagone_avg_outside_temp
+      - sensor.atagone_pcb_temp
+      - sensor.atagone_central_heating_setpoint
+      - sensor.atagone_central_heating_water_pressure
+      - sensor.atagone_central_heating_water_temp
+      - sensor.atagone_central_heating_return_temp
+      - sensor.atagone_hot_water_temp
+      - sensor.atagone_hot_water_pressure
+      - sensor.atagone_boiler_status
+      - sensor.atagone_boiler_config
+######################## GROUPS (Cards) ########################
+tessie_charging:
+  name: Tessie Charging
+  entities:
+    - boolean.enable_tessie_autoloading
+    - automation.tessie_start_charging_weekdays
+    - automation.tessie_stop_charging_weekdays
+tessie_status:
+  name: Tessie Status
+  view: no
+  entities:
+    - device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
+    - sensor.tesla_model_s_5yjsa7e26jf260737_mileage_sensor
+    - sensor.tesla_model_s_5yjsa7e26jf260737_range_sensor
+    - lock.tesla_model_s_5yjsa7e26jf260737_door_lock
+    - binary_sensor.tesla_model_s_5yjsa7e26jf260737_parking_brake_sensor
+tessie_climate:
+  name: Tessie Climate
+  view: no
+  entities:
+    - sensor.tesla_model_s_5yjsa7e26jf260737_temperature_sensor_inside
+    - sensor.tesla_model_s_5yjsa7e26jf260737_temperature_sensor_outside
+    - climate.tesla_model_s_5yjsa7e26jf260737_hvac_climate_system
+tessie_battery:
+  name: Tessie Battery
+  view: no
+  control: hidden
+  entities:
+    - sensor.tesla_model_s_5yjsa7e26jf260737_battery_sensor
+    - sensor.tesla_model_s_5yjsa7e26jf260737_range_sensor
+    - binary_sensor.tesla_model_s_5yjsa7e26jf260737_charger_sensor
+    - switch.tesla_model_s_5yjsa7e26jf260737_charger_switch
+    - switch.tesla_model_s_5yjsa7e26jf260737_maxrange_switch
+maries_bedroom_status:
+  name: Status
+  entities:
+   - binary_sensor.maries_bedroom
+
+office_cleaning:
+  name: Office Cleaning
+  entities:
+    - sensor.james_status
+    - sensor.james_
+    - switch.james_schedule
+    - vacuum.james
+    - camera.james_cleaning_map
+office_doors_and_windows:
+  name: Doors & Windows
+  entities:
+    - binary_sensor.office_door
+    - binary_sensor.velux_front_right
+    - binary_sensor.velux_front_left
+velux_windows:
+  name: All Velux
+  entities:
+    - binary_sensor.velux_front_right
+    - binary_sensor.velux_front_left
+garbage_collection:
+  name: Garbage Collection
+  entities:
+    - sensor.next_pmd
+    - sensor.next_gft
+    - sensor.next_huisvuil
+    - sensor.next_papier
+    - sensor.next_glas
+    
+weather:
+  name: Weather (local)
+  entities:
+    - sun.sun
+    - sensor.moon
+    - sensor.pws_relative_humidity
+    - sensor.pws_temp_c
+    - sensor.pws_weather
+    - sensor.pws_wind_string
+    - sensor.pws_weather
+    - sensor.pws_feelslike_c
+    - sensor.pws_temp_c
+    - sensor.pws_relative_humidity
+kitchen_lights:
+    name: Kitchen Lights
+    entities:
+      - switch.isle_light
+      - switch.work_light
+      - switch.table_light
+      - switch.coffee_light
+master_bedroom_lights:
+    name: Master Bedroom Lights
+    entities:
+      - switch.bedroom_light
+      - light.tradfri_bulb_e27_ws_opal_980lm
+      - light.tradfri_bulb_e27_ws_opal_980lm_2
+      - light.tradfri_bulb_e27_ws_opal_980lm_3
+groundfloor_lights:
+  name: Ground Floor Lights
+  entities:
+    - group.kitchen_lights
+passage_light:
+  name: First Floor Passage Light
+  control: hidden
+  entities:
+    - switch.passage_light
+    - input_boolean.passage_light_timer
+living_settings:
+  name: Settings
+  control: hidden
+  entities:
+    - input_boolean.living_front_light_timer
