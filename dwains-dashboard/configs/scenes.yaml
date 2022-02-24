@@ -1,0 +1,7 @@
+scenes:
+  main_menu: 'true' #Optional
+  entities:
+    - entity: scene.koken
+      icon: fas:couch
+      icon_color: '#ffffff'
+      background: 'linear-gradient( 135deg, #FEB692 10%, #EA5455 100%)'

@@ -1,0 +1,5 @@
+- type: custom:scheduler-card
+  include:
+    - climate
+  title: true
+
