@@ -1,0 +1,27 @@
+- platform: workday
+  country: BE
+  workdays: [mon, tue, wed, thu, fri]
+- platform: tod
+  name: Night
+  after: sunset
+  before: sunrise
+- platform: tod
+  name: Day
+  after: sunrise
+  before: sunset
+- platform: tod
+  name: Quiet time
+  after: '21:00'
+  before: '06:00'
+- platform: tod
+  name: Morning
+  after: '06:00'
+  before: '08:30'
+- platform: tod
+  name: Midday
+  after: '08:30'
+  before: '17:00'
+- platform: tod
+  name: Evening
+  after: '17:00'
+  before: '22:00'

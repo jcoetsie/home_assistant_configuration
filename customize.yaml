@@ -1,22 +1,65 @@
-switch.isle_light:
-  friendly_name: kitchen isle light
-  icon: mdi:spotlight-beam
-switch.work_light:
-  friendly_name: kitchen work light
-  icon: mdi:spotlight-beam
-switch.table_light:
-  friendly_name: kitchen table light
+switch.galaxy_tab_s3:
+  friendly_name: Tablet
+  icon: mdi:tablet
+light.dc4f22c06ecb_192_168_1_75:
+  friendly_name: Dampkap Verlichting
+  icon: mdi:led-strip
+light.keukentafel_licht:
   icon: mdi:ceiling-light
-switch.coffee_light:
-  friendly_name: coffee light
+light.slaapkamer_marie:
+  icon: mdi:wall-sconce-flat
+switch.radiator_dressing:
+  icon: mdi:radiator
+switch.radiator_living:
+  icon: mdi:radiator
+switch.radiator_kantoor_deur:
+  icon: mdi:radiator
+switch.radiator_slaapkamer_boven:
+  icon: mdi:radiator
+switch.radiator_slaapkamer_beneden:
+  icon: mdi:radiator
+switch.radiator_mezanine:
+  icon: mdi:radiator
+switch.radiator_keuken:
+  icon: mdi:radiator
+switch.radiator_kantoor:
+  icon: mdi:radiator
+switch.ketel:
+  icon: mdi:water-boiler
+switch.pomp_verwarming:
+  icon: mdi:water-pump
+cover.rolluiken_slaapkamer_boven:
+  icon: mdi:window-shutter
+binary_sensor.Gang_contact:
+  icon: mdi:walk
+  device_class: motion
+binary_sensor.Douche_contact:
+  friendly_name: Beweging in douche
+  icon: mdi:walk
+  device_class: motion
+binary_sensor.Slaapkamer_Marie_contact:
+  friendly_name: Beweging in slaapkamer Marie
+  icon: mdi:walk
+  device_class: motion
+binary_sensor.gang_contact:
+  friendly_name: Beweging in gang
+  icon: mdi:walk
+  device_class: motion
+binary_sensor.living_contact:
+  friendly_name: Beweging in Living
+  icon: mdi:walk
+  device_class: motion
+light.flos_arco:
   icon: mdi:spotlight-beam
-light.tradfri_bulb_e27_ws_opal_980lm:
-  friendly_name: master bedroom light
-sensor.weather_minimum:
-  icon: mdi:thermometer
-sensor.weather_maximum:
-  icon: mdi:thermometer
-light.tradfri_bulb_e27_ws_opal_980lm_3:
-  friendly_name: Bed Side Light
-light.tradfri_bulb_e27_cws_opal_600lm:
-  friendly_name: Living Lamp
+light.600194956ea9_192_168_1_245:
+  friendly_name: Bed Marie
+sensor.ilva_afvalophaling_gft:
+  friendly_name: gft
+sensor.ilva_afvalophaling_glas:
+  friendly_name: glas
+sensor.ilva_afvalophaling_papier:
+  friendly_name: papier
+sensor.ilva_afvalophaling_pmd:
+  friendly_name: pmd
+sensor.ilva_afvalophaling_restafval:
+  friendly_name: restafval
