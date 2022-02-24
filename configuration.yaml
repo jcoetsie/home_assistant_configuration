@@ -6,6 +6,8 @@ http:
 #  ssl_certificate: /ssl/fullchain.pem
 #  ssl_key: /ssl/privkey.pem
 logger:
+
+error
   default: warning
   logs:
     # homeassistant.components.nest: debug
