@@ -1,0 +1,14 @@
+---
+name: Config check
+on: [push]
+jobs:
+  config-check-stable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: mv secrets.yaml.example secrets.yaml
+      - uses: kpucynski/action-ha-config-check@master
+        with:
+          ha_version: "latest"
+        env:
+          HASS_EXTRA_ARGS: "-f -s -i"
