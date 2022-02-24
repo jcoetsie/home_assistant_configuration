@@ -17,6 +17,7 @@ blueprint:
           entity:
             domain: light
     check_target:
+      name: Device to check
     no_motion_wait:
       name: Wait time
       description: Time to leave the light on after last motion is detected.

@@ -160,6 +160,8 @@
       no_motion_wait: 10
       no_deactivation_entity: media_player.bathroom
       no_deactivation_state: playing
+      check_target: input_boolean.laundryroom_presence_override
+
 - id: '1624137462284'
   alias: velux bug
   description: 'Reboot velux when ha reboots '
