@@ -1,0 +1,41 @@
+media_tags_marie:
+  automation:
+    - id: handle_tag_scan
+      alias: Handle Tag Scan
+      mode: single
+      # Hide warnings when triggered while in delay.
+      max_exceeded: silent
+      variables:
+        # Map scanner device ID to media player entity ID
+        media_players:
+          fb2ccf30c06f42dbb08498884d893e22: media_player.kantoor
+        # Map tag ID to content
+        tags:
+          45-CA-43-2A:
+            media_content_id: "https://open.spotify.com/playlist/1E51zfwAyi7rq7xkiKpFsf?si=ea5inWJ5TQyQ90KodfxIsQ"
+            media_content_type: playlist
+          E7-DC-C1-C6:
+            media_content_id: "https://open.spotify.com/album/4f8vPjBKfZ7XKVD6CbsuGk?si=IBkDUYDqTyCXHx86TBHvOQ"
+            media_content_type: music
+      trigger:
+        platform: event
+        event_type: tag_scanned
+      condition:
+        # Test that we support this device and tag
+        - "{{ trigger.event.data.tag_id in tags }}"
+        - "{{ trigger.event.data.device_id in media_players }}"
+      action:
+        - variables:
+            media_player_entity_id: "{{ media_players[trigger.event.data.device_id] }}"
+            media_content_id: "{{ tags[trigger.event.data.tag_id].media_content_id }}"
+            media_content_type: "{{ tags[trigger.event.data.tag_id].media_content_type }}"
+        - service: media_player.shuffle_set
+          data:
+            entity_id: "{{ media_player_entity_id }}"
+            shuffle: true
+        - service: media_player.play_media
+          data:
+            entity_id: "{{ media_player_entity_id }}"
+            media_content_id: "{{ media_content_id }}"
+            media_content_type: "{{ media_content_type }}"
+        - delay: 2 # timeout before we allow processing next scan

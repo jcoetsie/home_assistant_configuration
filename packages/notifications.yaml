@@ -1,0 +1,15 @@
+notifications:
+  automation:
+    - id: "test speech"
+      alias: "test speech"
+      trigger:
+        - platform: state
+          entity_id: input_boolean.test_schakelaar
+          to: "on"
+      action:
+        - service: script.my_sonos_say
+          data:
+            sonos_entity: media_player.kantoor
+            volume: 0.5
+            message: "Your husband coming home!"
+            delay: "00:00:05"

@@ -1,0 +1,23 @@
+rol_presence:
+  binary_sensor:
+    - platform: template
+      sensors:
+        # When is the office occupied?
+        # Computers are working
+        # laptop camera is on
+        # movement is detected
+        # tv is playing? -> officemedia player -> can check attribute
+
+        office_presence:
+          friendly_name: "Office Presence"
+          device_class: occupancy
+          value_template: >
+            {%if (
+                  (is_state('media_player.office_tv', 'on'))
+              or (is_state('device_tracker.jurgens_macbook_pro', 'home') and
+                  is_state('binary_sensor.jurgens_macbook_pro_facetime_hd_camera_built_in', 'on'))
+              ) %}
+              true
+            {%- else %}
+              false
+            {%- endif %}

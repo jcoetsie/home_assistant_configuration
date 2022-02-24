@@ -1,0 +1,75 @@
+## FullUp data
+# Serial: 3719
+# Id Modem: 2485
+
+
+energy_heating_gasoil:
+
+  utility_meter:
+    dagelijks_mazout_verbruik:
+      source: sensor.mazout
+      cycle: daily
+  template:
+    - sensor:
+        - name: "mazout tank percentage"
+          unit_of_measurement: "%"
+          state: >
+            {% set aanwezig_volume = states('sensor.mazout') | float %}
+            {% set totaal_volume = state_attr('sensor.mazout', 'total') | float %}
+
+            {{ (aanwezig_volume / totaal_volume * 100) | round}}
+  sensor:
+    - platform: rest
+      name: FullUp token
+      resource: https://api.fullup.be/auth/generate
+      payload: !secret fullup_payload # voir post précédent
+      method: POST
+      value_template: >
+        {% if value_json.success == true %}
+          OK
+        {% else %}
+          KO
+        {% endif %}
+      json_attributes:
+        - result
+      scan_interval: 86400
+
+    - platform: command_line
+      command: >
+        curl
+        --header "Authorization: {{ state_attr('sensor.fullup_token', 'result')['type'] }} {{ state_attr('sensor.fullup_token', 'result')['token'] }}"
+        --header "Content-Type: application/json"
+        "https://api.fullup.be/tanks_public/5eb40653d438750e0ed4def0" # à obtenir en appelant une fois https://api.fullup.be/loginApi?email=[VOTRE EMAIL]&password=[VOTRE MDP]
+      name: FullUp
+      scan_interval: 3600
+      value_template: >
+        {% if value_json.success == true %}
+          OK
+        {% else %}
+          KO
+        {% endif %}
+      json_attributes:
+        - result
+
+    - platform: template
+      sensors:
+        mazout:
+          #entity_id: sensor.fullup, sensor.fullup_token
+          friendly_name_template: "{{ state_attr('sensor.fullup', 'result')['tank_name'] }}"
+          value_template: "{{ state_attr('sensor.fullup', 'result')['last_minimum_level'] }}"
+          availability_template: "{{ is_state('sensor.fullup', 'OK') }}"
+          unit_of_measurement: L
+          icon_template: "mdi:tanker-truck"
+          attribute_templates:
+        #   date: "{{ state_attr('sensor.fullup', 'result')['last_measure_date'] | as_timestamp() | timestamp_local }}"
+            total: "{{ state_attr('sensor.fullup', 'result')['tank_total_volume'] }}"
+            jours_restant: "{{ state_attr('sensor.fullup', 'result')['days_left'] }}" # ne fonctionne plus, peut-être plus tard, si FullUp veut bien le réintroduire.
+            token_expire: "{{ state_attr('sensor.fullup_token', 'result')['token_expiration_date'] | as_timestamp() | timestamp_local }}"
+
+    #TODO: fix scraping issue
+    # - platform: scrape
+    #   resource: https://informazout.be/nl/mazout/prijs
+    #   name: Mazout Prijs
+    #   select: ".current-prices--price"
+    #   value_template: '{{value | replace(" ", "") | replace("€", "") | replace("/l.", "")}}'
+    #   unit_of_measurement: "€/L"

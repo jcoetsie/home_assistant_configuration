@@ -1,0 +1,17 @@
+weather_weather:
+  weather:
+    - platform: buienradar
+      name: pastorale_buienradar
+  camera:
+    - platform: buienradar
+      country_code: BE
+  sensor:
+    - platform: openweathermap
+      api_key: !secret openweathermap_apikey
+      monitored_conditions:
+        - weather
+        - rain
+        - temperature
+        - snow
+      language: nl
+

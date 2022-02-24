@@ -1,0 +1,20 @@
+lights_living:
+  automation:
+    - alias: Light in the evening
+      trigger:
+        - platform: sun
+          event: sunset
+          offset: "-01:00:00"
+        - platform: state
+          entity_id: person.jurgen_coetsiers, person.kristel_bekaert
+          to: "home"
+      condition:
+        - condition: state
+          entity_id: person.jurgen_coetsiers, person.kristel_bekaert
+          state: "home"
+        - condition: time
+          after: "16:00:00"
+          before: "23:00:00"
+      action:
+        service: homeassistant.turn_on
+        entity_id: group.living_room

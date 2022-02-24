@@ -1,0 +1,199 @@
+announcements:
+  #TODO: needs total cleanup
+  # sensor:    
+  #   - platform: template
+  #     sensors:
+        # morning_text:
+        #   value_template: >-
+        #     Goeie morgen, Het wordt vandaag {{states('weather.pastorale_buienradar')}} met {{state_attr('weather.pastorale_buienradar', 'temperature')}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[0].percipitation | default(0)}}%.
+        #     {% if not is_state('sensor.ilva_afvalophaling_vandaag', "Geen") -%}
+        #     Opgelet vandaag komen ze het {{states('sensor.ilva_afvalophaling_vandaag')}} afval ophalen. 
+        #     {% endif -%}
+        #     {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+        #     Niet vergeten om deze avond het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten. 
+        #     {% endif -%}
+        #     {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+        #     Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.
+        #     {% endif -%}
+        #     {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+        #     De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.
+        #     {% endif -%}
+        # evening_text:
+        #   value_template: >-
+        #     Goeie avond, morgen wordt het {{state_attr('weather.pastorale_buienradar', 'forecast')[1].condition}} met {{state_attr('weather.pastorale_buienradar', 'forecast')[1].temperature}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[1].percipitation | default(0)}}%.
+        #     {% if is_state('sensor.ilva_afvalophaling_vandaag', "gft") -%}
+        #     Vergeet de GTF bak niet binnen te zetten indien hij buiten stond!
+        #     {% endif -%}
+        #     {% if is_state('sensor.ilva_afvalophaling_vandaag', "glas") -%}
+        #     Het glas is opgehaald, vergeet de bakken niet binnen te zetten!
+        #     {% endif -%}
+        #     {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+        #     Je moet ook het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten. 
+        #     {% endif -%}
+        #     {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+        #     Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.
+        #     {% endif -%}
+        #     {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+        #     De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.
+        #     {% endif -%}
+            
+    # - platform: waze_travel_time
+    #   origin: Pastorale
+    #   destination: Werk Kristel
+    #   name: Rijtijd School Kristel Heen
+    #   region: EU
+    # - platform: waze_travel_time
+    #   origin: Werk Kristel
+    #   destination: Pastorale
+    #   name: Rijtijd School Kristel Terug
+    #   region: EU
+    # - platform: waze_travel_time
+    #   origin: Pastorale
+    #   destination: Waver
+    #   name: Rijtijd Waver
+    #   region: EU
+    # - platform: waze_travel_time
+    #   origin: Pastorale
+    #   destination: Vlekkem
+    #   name: Rijtijd Vlekkem
+    #   region: EU
+
+
+
+  automation:
+    - id: morning text message
+      alias: morning text message
+      trigger:
+        - platform: time
+          at: "07:00:00"
+      action:
+        - service: homeassistant.update_entity
+          entity_id: sensor.rijtijd_school_kristel_heen
+        - service: notify.mobile_app_iphone_van_kristel
+          data_template:
+            title: "Jouw ochtend briefing voor {{states('sensor.date')}}"
+            message: >-
+              Goeie morgen, Het wordt vandaag {{states('weather.pastorale_buienradar')}} met {{state_attr('weather.pastorale_buienradar', 'temperature')}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[0].percipitation | default(0)}}%.
+              Het duurt momenteel {{state_attr('sensor.rijtijd_school_kristel_heen', 'duration') | round }} minuten om via {{state_attr('sensor.rijtijd_school_kristel_heen', 'route')}} naar school te rijden.
+              {% if not is_state('sensor.ilva_afvalophaling_vandaag', "Geen") -%}
+              Opgelet vandaag komen ze het {{states('sensor.ilva_afvalophaling_vandaag')}} afval ophalen. 
+              {% endif -%}
+              {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+              Niet vergeten om deze avond het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten. 
+              {% endif -%}
+              {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+              Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.
+              {% endif -%}
+              {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+              De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.
+              {% endif -%}
+            data:
+              attachment:
+                content-type: jpeg
+              push:
+                category: camera
+              entity_id: camera.buienradar_loop
+              sticky: true
+              presentation_options:
+                - alert
+              timeout: 18000
+        - service: notify.mobile_app_iphone
+          data_template:
+            title: "Jouw ochtend briefing voor {{states('sensor.date')}}"
+            message: >-
+              Goeie morgen, Het wordt vandaag {{states('weather.pastorale_buienradar')}} met {{state_attr('weather.pastorale_buienradar', 'temperature')}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[0].percipitation | default(0)}}%.
+              {% if not is_state('sensor.ilva_afvalophaling_vandaag', "Geen") -%}
+              Opgelet vandaag komen ze het {{states('sensor.ilva_afvalophaling_vandaag')}} afval ophalen. 
+              {% endif -%}
+              {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+              Niet vergeten om deze avond het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten. 
+              {% endif -%}
+              {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+              Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.
+              {% endif -%}
+              {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+              De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.
+              {% endif -%}
+            data:
+              attachment:
+                content-type: jpeg
+              push:
+                category: camera
+              entity_id: camera.buienradar_loop
+              sticky: true
+              presentation_options:
+                - alert
+              timeout: 18000
+      
+    - id: evening text message
+      alias: evening text message
+      trigger:
+        - platform: time
+          at: "19:00:00"
+      action:
+        - service: notify.mobile_app_iphone
+          data_template:
+            title: "Jouw avond briefing voor {{states('sensor.date')}}"
+            message: >-
+              <p>Goeie avond, morgen wordt het {{state_attr('weather.pastorale_buienradar', 'forecast')[1].condition}} met {{state_attr('weather.pastorale_buienradar', 'forecast')[1].temperature}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[1].percipitation | default(0)}}%.</p>
+              {% if is_state('sensor.ilva_afvalophaling_vandaag', "gft") -%}
+              <p>Vergeet de GTF bak niet binnen te zetten indien hij buiten stond!</p>
+              {% endif -%}
+              {% if is_state('sensor.ilva_afvalophaling_vandaag', "glas") -%}
+              <p>Het glas is opgehaald, vergeet de bakken niet binnen te zetten!</p>
+              {% endif -%}
+              {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+              <p>Je moet ook het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten.</p>
+              {% endif -%}
+              {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+              <p>Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.</p>
+              {% endif -%}
+              {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+              <p>De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.</p>
+              {% endif -%}
+            data:
+              sticky: true
+              presentation_options:
+                - alert
+              timeout: 18000
+        - service: notify.mobile_app_iphone_van_kristel
+          data_template:
+            title: "Jouw avond briefing voor {{states('sensor.date')}}"
+            message: >-
+              <p>Goeie avond, morgen wordt het {{state_attr('weather.pastorale_buienradar', 'forecast')[1].condition}} met {{state_attr('weather.pastorale_buienradar', 'forecast')[1].temperature}} graden, de kans op regen is {{state_attr('weather.pastorale_buienradar', 'forecast')[1].percipitation | default(0)}}%.</p>
+              {% if is_state('sensor.ilva_afvalophaling_vandaag', "gft") -%}
+              <p>Vergeet de GTF bak niet binnen te zetten indien hij buiten stond!</p>
+              {% endif -%}
+              {% if is_state('sensor.ilva_afvalophaling_vandaag', "glas") -%}
+              <p>Het glas is opgehaald, vergeet de bakken niet binnen te zetten!</p>
+              {% endif -%}
+              {% if not is_state('sensor.ilva_afvalophaling_morgen', "Geen") -%}
+              <p>Je moet ook het {{states('sensor.ilva_afvalophaling_morgen')}} afval buiten te zetten.</p>
+              {% endif -%}
+              {% if not is_state('sensor.nieuwe_doccle_documenten', 0) -%}
+              <p>Gelieve ook Doccle te checken want er zijn {{states('sensor.nieuwe_doccle_documenten')}} nieuwe documenten om te verwerken.</p>
+              {% endif -%}
+              {% if is_state('sensor.mfc_j5720dw_status', 'inkt bijna op') -%}
+              <p>De printer op kantoor laat weten dat de inkt bijna op is, gelieve na te kijken en eventueel inkt te bestellen.</p>
+              {% endif -%}
+            data:
+              sticky: true
+              presentation_options:
+                - alert
+              timeout: 18000
+        
+  script:
+    'good_morning':
+      alias: Goeie morgen
+      sequence:
+        - service: script.turn_on
+          entity_id: script.say
+          data:
+            variables:
+              where: 'pool'
+              what:  "{{states('sensor.morning_text')}}"
+            
+      #- service: sonos.restore
+      #  data:
+      #    entity_id: all
+      #    with_group: yes

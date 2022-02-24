@@ -1,0 +1,12 @@
+lights_shower:
+  automation:
+    - id: "douche licht"
+      alias: Douche - Licht
+      description: Licht in douche aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light.yaml
+        input:
+          no_motion_wait: "240"
+          motion_entity: binary_sensor.douche_home_security_motion_detection
+          light_target:
+            entity_id: light.douche_2

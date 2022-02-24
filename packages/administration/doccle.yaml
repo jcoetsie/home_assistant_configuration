@@ -1,0 +1,12 @@
+administration_doccle:
+  sensor:
+    - platform: rest
+      resource: https://secure.doccle.be/doccle-euui/rest/v2/documents/new
+      name: Nieuwe Doccle Documenten
+      value_template: '{{value_json.documents | length}}'
+      username: !secret doccle_user
+      password: !secret doccle_password
+      authentication: basic
+      headers:
+        User-Agent: Home Assistant
+        Content-Type: application/json

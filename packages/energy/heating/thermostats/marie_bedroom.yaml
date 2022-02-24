@@ -1,0 +1,66 @@
+energy_heating_thermostats_marie_bedroom:
+  climate:
+    - platform: generic_thermostat
+      name: marie
+      heater: switch.radiator_kamer_marie
+      target_sensor: sensor.marie_temperatuur
+      min_temp: 15
+      max_temp: 23
+      ac_mode: false
+      target_temp: 18
+      cold_tolerance: 0.3
+      hot_tolerance: 0.3
+      min_cycle_duration:
+        seconds: 5
+      keep_alive:
+        minutes: 3
+      initial_hvac_mode: heat
+      away_temp: 16
+      precision: 0.5
+
+  input_select:
+    marie_climate:
+      name: Marie Climate
+      options:
+        - vacation
+        - away
+        - home
+        - boost
+        - night
+      initial: away
+      icon: mdi:target
+
+  # Are used to raise temperaturez ina room for a specified time
+  # after timer elapses, temperature is reset to base room temperature
+  timer:
+    kamer_marie:
+      duration: "01:00:00"
+
+  automation:
+    - id: "Marie Climate Management"
+      alias: "CLIMATE - MARIE"
+      trigger:
+        - platform: state
+          entity_id: input_select.marie_climate
+      action:
+        - service: script.turn_on
+          entity_id: script.set_room_temperature
+          data:
+            variables:
+              thermostat: marie
+              climate_mode: "{{ states('input_select.marie_climate') }}"
+
+    - id: "Marie Climate Management - boost management"
+      alias: "CLIMATE - MARIE - BOOST"
+      trigger:
+        - platform: state
+          entity_id: input_select.marie_climate
+          to: boost
+          for: "01:00:00"
+      action:
+        - service: input_select.select_option
+          target:
+            entity_id: input_select.marie_climate
+          data:
+            option: home
+

@@ -1,0 +1,42 @@
+energy_heating_radiators:
+  group:
+    kantoor_radiatoren:
+      name: Radiatoren Kantoor
+      entities:
+        - switch.radiator_kantoor
+        - switch.radiator_kantoor_deur
+      icon: mdi:radiator
+    leefruimte_radiatoren:
+      name: Radiatoren Leefruimte
+      entities:
+        - switch.radiator_keuken
+        - switch.radiator_living
+      icon: mdi:radiator
+    slaapkamer_radiatoren:
+      name: Radiatoren Slaapkamer
+      entities:
+        - switch.radiator_slaapkamer_deur
+        - switch.radiator_slaapkamer_bed
+      icon: mdi:radiator
+    radiatoren:
+      name: Radiatoren
+      entities:
+        - switch.radiator_kantoor
+        - switch.radiator_kantoor_deur
+        - switch.radiator_keuken
+        - switch.radiator_living
+        - switch.radiator_mezzaninne
+        - switch.radiator_slaapkamer_bed
+        - switch.radiator_slaapkamer_deur
+        - switch.radiator_kamer_marie
+      icon: mdi:radiator
+    prive_radiatoren:
+      name: Radiatoren Privé
+      entities:
+        - switch.radiator_keuken
+        - switch.radiator_living
+        - switch.radiator_mezzaninne
+        - switch.radiator_slaapkamer_bed
+        - switch.radiator_slaapkamer_deur
+        - switch.radiator_kamer_marie
+      icon: mdi:radiator

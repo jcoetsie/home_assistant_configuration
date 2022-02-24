@@ -1,0 +1,86 @@
+energy_heating_thermostats_living:
+  climate:
+    - platform: generic_thermostat
+      name: living
+      heater: group.leefruimte_radiatoren
+      target_sensor: sensor.living_temperatuur
+      min_temp: 15
+      max_temp: 23
+      ac_mode: false
+      target_temp: 21
+      cold_tolerance: 0.3
+      hot_tolerance: 0.3
+      min_cycle_duration:
+        seconds: 5
+      keep_alive:
+        minutes: 3
+      initial_hvac_mode: heat
+      away_temp: 16
+      precision: 0.5
+
+
+  input_select:
+    living_climate:
+      name: Living Climate
+      options:
+        - vacation
+        - away
+        - home
+        - boost
+        - night
+      initial: away
+      icon: mdi:target
+
+  automation:
+  - id: "CLIMATE - LIVING"
+    alias: "CLIMATE - LIVING"
+    trigger:
+      - platform: state
+        entity_id: input_select.living_climate
+    action:
+      - service: script.turn_on
+        entity_id: script.set_room_temperature
+        data:
+          variables:
+            thermostat: living
+            climate_mode: "{{ states('input_select.living_climate') }}"
+
+  - id: "Living Climate Management - boost management"
+    alias: "CLIMATE - LIVING - BOOST"
+    trigger:
+      - platform: state
+        entity_id: input_select.living_climate
+        to: boost
+        for: "01:00:00"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.living_climate
+        data:
+          option: home
+
+  - id: "Living Climate Management - When away, all is away"
+    alias: "CLIMATE - LIVING - AWAY"
+    trigger:
+      - platform: state
+        entity_id: input_select.living_climate
+        to: away
+    #    for: "01:00:00"
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.marie_climate
+        data:
+          option: away
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.master_bedroom_climate
+        data:
+          option: away
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.orangery_climate
+        data:
+          option: away
+
+

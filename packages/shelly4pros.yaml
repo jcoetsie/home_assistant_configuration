@@ -1,0 +1,111 @@
+shelly4pros:
+  light:
+    - platform: mqtt
+      name: "Badkamer"
+      state_topic: "shellies/shelly4pro-4D07E6/relay/0"
+      command_topic: "shellies/shelly4pro-4D07E6/relay/0/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "Bijkeuken"
+      state_topic: "shellies/shelly4pro-4D07E6/relay/1"
+      command_topic: "shellies/shelly4pro-4D07E6/relay/1/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "Toilet"
+      state_topic: "shellies/shelly4pro-4D07E6/relay/2"
+      command_topic: "shellies/shelly4pro-4D07E6/relay/2/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "Basement"
+      state_topic: "shellies/shelly4pro-4D07E6/relay/3"
+      command_topic: "shellies/shelly4pro-4D07E6/relay/3/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    #shelly 4 pro main cabin, first left
+    - platform: mqtt
+      name: "Luster Mezzanine"
+      state_topic: "shellies/shelly4pro-4D08B0/relay/0"
+      command_topic: "shellies/shelly4pro-4D08B0/relay/0/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "Technische Ruimte"
+      state_topic: "shellies/shelly4pro-4D08B0/relay/1"
+      command_topic: "shellies/shelly4pro-4D08B0/relay/1/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "Voordeur Licht"
+      state_topic: "shellies/shelly4pro-4D08B0/relay/2"
+      command_topic: "shellies/shelly4pro-4D08B0/relay/2/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    # - platform: mqtt
+    #   name: "Prive Toilet"
+    #   state_topic: "shellies/shelly4pro-4D08B0/relay/3"
+    #   command_topic: "shellies/shelly4pro-4D08B0/relay/3/command"
+    #   payload_on: "on"
+    #   payload_off: "off"
+    #   optimistic: false
+    #   qos: 1
+    #   retain: false
+    - platform: mqtt
+      name: "gardenshed main"
+      state_topic: "shellies/pro_gardenshed/relay/3"
+      command_topic: "shellies/pro_gardenshed/relay/3/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "gardenshed ledstrip"
+      state_topic: "shellies/pro_gardenshed/relay/2"
+      command_topic: "shellie//pro_gardenshed/relay/2/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "playground"
+      state_topic: "shellies/pro_gardenshed/relay/1"
+      command_topic: "shellies/pro_gardenshed/relay/1/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false
+    - platform: mqtt
+      name: "gardenshed accent"
+      state_topic: "shellies/shelly4pro-B9E7C2/relay/0"
+      command_topic: "shellies/shelly4pro-B9E7C2/relay/0/command"
+      payload_on: "on"
+      payload_off: "off"
+      optimistic: false
+      qos: 1
+      retain: false

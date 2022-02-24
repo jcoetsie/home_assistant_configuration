@@ -1,0 +1,48 @@
+alarm_kristel:
+  input_datetime:
+    tablet_alarm:
+      name: Tablet  Alarm Time
+      has_time: true
+      has_date: true
+      icon: mdi:android
+
+  automation:
+    - id: android_set_time
+      alias: Android Set Datetime
+      trigger:
+        platform: state
+        entity_id: sensor.sm_t825_next_alarm
+      mode: restart
+      condition:
+        - condition: not
+          conditions:
+            - condition: state
+              entity_id: sensor.sm_t825_next_alarm
+              state:
+                - unavailable
+                - unknown
+      action:
+        - delay: 00:00:10
+        - service: light.turn_off
+          entity_id: light.sfeerlamp_slaapkamer
+        - service: input_datetime.set_datetime
+          entity_id: input_datetime.tablet_alarm
+          data_template:
+            datetime: "{{ as_timestamp(states('sensor.sm_t825_next_alarm'))|timestamp_custom('%Y-%m-%d %H:%M:00') }} "
+    
+    - id: kristel_wekker  
+      alias: Kristel wekker
+      trigger:
+        platform: time
+        at: input_datetime.tablet_alarm
+      action:
+        - service: light.turn_on
+          target:
+            entity_id: light.sfeerlamp_slaapkamer
+          data:
+            transition: 300
+            brightness_pct: 100
+        - service: cover.open_cover
+          target:
+            entity_id: cover.rolluiken_slaapkamer_boven
+        

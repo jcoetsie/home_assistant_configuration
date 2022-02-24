@@ -1,0 +1,15 @@
+shoppen:
+  script:
+    te_kopen:
+      alias: Te Kopen
+      icon: "mdi:party-popper"
+      description: "Toe te voegen aan de shopping lijst"
+      fields:
+        product:
+          description: "het te kopen product"
+          example: "Brood"
+      sequence:
+        - alias: Add product
+          service: shopping_list.add_item
+          data:
+            name: "{{product}}"

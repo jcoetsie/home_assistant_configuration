@@ -1,0 +1,53 @@
+energy_heating_boiler:
+  # Measure time spent heating between office and private spaces
+
+  sensor:
+    - platform: history_stats
+      name: Office heating ON today
+      entity_id: group.kantoor_radiatoren
+      state: "on"
+      type: time
+      start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+      end: "{{ now() }}"
+    - platform: history_stats
+      name: Home Excl Office heating ON today
+      entity_id: group.prive_radiatoren
+      state: "on"
+      type: time
+      start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+      end: "{{ now() }}"
+
+  automation:
+    # MANAGE RELATIONSHIP BETWEEN RADIATOR VALVES & BOILER RELAY
+    - id: "CLIMATE - HEATING DEMAND"
+      alias: "CLIMATE - HEATING DEMAND"
+      initial_state: on
+      description: Wanneer een radiator klep open gaat moet de ketel aan en de pomp aan
+      trigger:
+        - entity_id: group.radiatoren
+          from: "off"
+          platform: state
+          to: "on"
+      condition: []
+      action:
+        - data: {}
+          entity_id:
+            - switch.ketel
+          service: switch.turn_on
+
+    - id: "CLIMATE - HEATING DEMAND END"
+      alias: "CLIMATE - HEATING DEMAND END"
+      initial_state: on
+      description:
+        Wanneer alle radiator kleppen dicht staan, sluit de ketel af.
+        # TODO:  maar laat de pomp draaien om rest warmte te verspreiden
+      trigger:
+        - entity_id: group.radiatoren
+          from: "on"
+          platform: state
+          to: "off"
+      condition: []
+      action:
+        - data: {}
+          entity_id: switch.ketel
+          service: switch.turn_off

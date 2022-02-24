@@ -1,0 +1,44 @@
+energy_heating_scripts:
+  script:
+    set_room_temperature:
+      description: "Set room temperature"
+      fields:
+        thermostat:
+          description: "thermostat for room"
+          example: "living"
+        climate_mode:
+          description: "Climate mode"
+          example: away
+      variables:
+        temperatures: 
+          vacation: 14.0
+          away: 16.0
+          home: 21.0
+          present: 21.0
+          boost: 22.0
+          night: 18.0
+      sequence:
+        - service: logbook.log
+          data:
+            name: "{{thermostat}}"
+            message: "is set to {{climate_mode}}"
+            entity_id: "climate.{{thermostat}}"
+            domain: climate
+        - choose:
+            - conditions:
+                - condition: template
+                  value_template:  "{{ climate_mode == 'off' }}"
+              sequence:
+                - service: climate.turn_off
+                  target:
+                    entity_id: "climate.{{thermostat}}" 
+          default:
+            - service: climate.turn_on
+              target:
+                entity_id: "climate.{{thermostat}}"
+            - service: climate.set_temperature
+              target:
+                entity_id: "climate.{{thermostat}}"
+              data:
+                temperature: "{{temperatures[climate_mode] | float}}"
+                hvac_mode: heat

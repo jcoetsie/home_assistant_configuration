@@ -1,0 +1,9 @@
+door_and_window_sensors:
+
+
+  group:
+    door_and_windows_livingspace:
+      name: Door & Window Sensors Livingspace
+      entities:
+        - binary_sensor.terras_sliding_window_sensor
+        - binary_sensor.basement_door_sensor

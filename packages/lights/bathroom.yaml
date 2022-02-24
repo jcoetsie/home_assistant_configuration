@@ -1,0 +1,12 @@
+lights_bathroom:
+  automation:
+    - id: "Badkamer licht"
+      alias: Badkamer - Licht
+      description: Licht aan badkamer aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light.yaml
+        input:
+          no_motion_wait: 600
+          motion_entity: binary_sensor.badkamer_pir_sensor
+          light_target:
+            entity_id: light.badkamer

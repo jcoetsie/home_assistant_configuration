@@ -1,0 +1,41 @@
+media_kitchen_media_rotary_encoder:
+  automation:
+    - id: Adjust Volume on Rotary Encoder Move
+      alias: Rotary Volume Change
+      trigger:
+        - platform: state
+          entity_id: sensor.kitchen_volume
+      action:
+        - service: media_player.volume_set
+          entity_id: media_player.kitchen_2
+          data_template:
+            volume_level: "{{ states.sensor.kitchen_volume.state | float / 100 }}"
+    - id: HAndle kitchen media switch
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.kitchen_volume_switch_button
+          to: "on"
+      action:
+        - service: switch.toggle
+          entity_id: switch.kitchen_radio
+
+  switch:
+    - platform: template
+      switches:
+        kitchen_radio:
+          value_template: "{{ is_state('media_player.kitchen_2', 'playing') }}"
+          turn_on:
+            service: media_player.media_play
+            data:
+              entity_id: media_player.kitchen_2
+              media_content_id: "hls-radio://https://live-radio-cf-vrt.akamaized.net/groupc/live/f404f0f3-3917-40fd-80b6-a152761072fe/live.isml/.m3u8?"
+          turn_off:
+            service: media_player.media_stop
+            data:
+              entity_id: media_player.kitchen_2
+          icon_template: >-
+            {% if is_state('media_player.kitchen_2', 'playing') %}
+              mdi:music
+            {% else %}
+              mdi:music-off
+            {% endif %}

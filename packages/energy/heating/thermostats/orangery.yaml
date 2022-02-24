@@ -1,0 +1,201 @@
+energy_heating_thermostats_orangery:
+
+  climate:
+    # - platform: generic_thermostat
+    #   name: Orangery
+    #   heater: group.kantoor_radiatoren
+    #   target_sensor: sensor.kantoor_temperatuur_2
+    #   min_temp: 16
+    #   max_temp: 23
+    #   ac_mode: false
+    #   target_temp: 16
+    #   cold_tolerance: 0.3
+    #   hot_tolerance: 0.3
+    #   min_cycle_duration:
+    #     seconds: 5
+    #   keep_alive:
+    #     minutes: 3
+    #   initial_hvac_mode: heat
+    #   away_temp: 16
+    #   precision: 0.5
+    - platform: smart_thermostat
+      name: Orangery Smart
+      unique_id: smart_thermostat_orangerie
+      heater: group.kantoor_radiatoren
+      target_sensor: sensor.kantoor_temperatuur_2
+      min_temp: 16
+      max_temp: 23
+      ac_mode: False
+      target_temp: 19
+      keep_alive:
+        seconds: 60
+      away_temp: 14
+      kp : 5
+      ki : 0.01
+      kd : 500
+      pwm : 00:15:00
+  input_select:
+    orangery_climate:
+      name: Orangery Climate
+      options:
+        - vacation
+        - away
+        - home
+        - boost
+        - night
+      initial: away
+      icon: mdi:target
+
+  automation:
+    - id: "Orangery Climate Management"
+      alias: "CLIMATE - ORANGERY"
+      trigger:
+        - platform: state
+          entity_id: input_select.orangery
+      action:
+        - service: script.turn_on
+          entity_id: script.set_room_temperature
+          data:
+            variables:
+              thermostat: orangery
+              climate_mode: "{{ states('input_select.orangery_climate') }}"
+
+    - id: "Orangery Climate Management - boost management"
+      alias: "CLIMATE - ORANGERY - BOOST"
+      trigger:
+        - platform: state
+          entity_id: input_select.orangery_climate
+          to: boost
+          for: "01:00:00"
+      action:
+        - service: input_select.select_option
+          target:
+            entity_id: input_select.orangery_climate
+          data:
+            option: home
+    ##########################################
+    # HEATNG AUTOMATION - KANTOOR - SCHEDULE #
+    ##########################################
+    - id: KANTOOR - HEATING - BOOST ELECTRIC
+      alias: CLIMATE - ORANGERY - ELECTRIC HELP
+      trigger:
+        - platform: numeric_state
+          entity_id: climate.orangery
+          value_template: "{{ state_attr('climate.orangery', 'temperature') - state_attr('climate.orangery', 'current_temperature') }}"
+          above: 2
+      condition:
+        - condition: state
+          entity_id: climate.orangery
+          state: heat
+      action:
+        - service: switch.turn_on
+          entity_id: switch.electrische_verwarming
+
+    - id: KANTOOR - HEATING - END BOOST ELECTRIC
+      alias: CLIMATE - ORANGERY - ELECTRIC HELP - STOP
+      trigger:
+        - platform: numeric_state
+          entity_id: climate.orangery
+          value_template: "{{ state_attr('climate.orangery', 'temperature') - state_attr('climate.orangery', 'current_temperature') }}"
+          below: 0.5
+      condition:
+        - condition: state
+          entity_id: climate.orangery
+          state: heat
+      action:
+        - service: switch.turn_off
+          entity_id: switch.electrische_verwarming
+
+    - id: KANTOOR - OPEN WINDOW - GOOD WEATHER - HEATING OFF - CHECK EVERY 5 MINUTES
+      alias: CLIMATE - ORANGERY - GOOD WEATHER - NO HEATING
+      trigger:
+        - minutes: "/5"
+          platform: time_pattern
+      condition:
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: cover.velux_kantoor
+              state: open
+            - condition: numeric_state
+              entity_id: weather.pastorale_buienradar
+              value_template: "{{ state_attr('weather.pastorale_buienradar', 'temperature') }}"
+              above: 18
+      action:
+        - service: climate.turn_off
+          entity_id: climate.orangery
+
+    - id: KANTOOR - OPEN WINDOW - COLD WEATHER - CLOSE WINDOWS - CHECK EVERY 5 MINUTES
+      alias: CLIMATE - ORANGERY - WINDOWS - COLD WEATHER - CLOSE
+      trigger:
+        - minutes: "/5"
+          platform: time_pattern
+      condition:
+        - condition: state
+          entity_id: cover.velux_kantoor
+          state: open
+        - condition: numeric_state
+          entity_id: weather.pastorale_buienradar
+          value_template: "{{ state_attr('weather.pastorale_buienradar', 'temperature') }}"
+          below: 18
+      action:
+        - service: cover.close_cover
+          entity_id: cover.velux_kantoor
+
+    - id: KANTOOR - OPEN WINDOW - NO HEATING
+      alias: CLIMATE - ORANGERY - WINDOW OPEN
+      trigger:
+        - platform: state
+          entity_id: cover.velux_kantoor
+          to: open
+      action:
+        - service: climate.turn_off
+          entity_id: climate.orangery
+
+    - id: KANTOOR - CLOSED WINDOW - HEATING
+      alias: CLIMATE - ORANGERY - WINDOW CLOSED
+      trigger:
+        - platform: state
+          entity_id: cover.velux_kantoor
+          to: closed
+      action:
+        - service: climate.turn_on
+          entity_id: climate.orangery
+    - id: timer heating weekdays on office on
+      alias: CLIMATE - ORANGERY - WEEKDAYS - ON
+      trigger:
+        platform: time
+        at: "08:00:00"
+      condition:
+        condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+      action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.orangery_climate
+        data:
+          option: home
+    - id: timer heating week on office off
+      alias: CLIMATE - ORANGERY - WEEKDAYS - OFF
+      trigger:
+        platform: time
+        at: "18:00:00"
+      condition:
+        condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+      action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.orangery_climate
+        data:
+          option: away

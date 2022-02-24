@@ -1,0 +1,24 @@
+# energy_consumption:
+#   sensor:
+#     - platform: youless
+#       name: main power
+#       host: 192.168.1.22
+#       monitored_variables:
+#         - pwr
+#         - cnt
+
+#utility_meter:
+#  daily_energy:
+#    source: sensor.energy
+#    name: Daily Energy
+#    cycle: daily
+#    tariffs:
+#      - peak
+#      - offpeak
+#  monthly_energy:
+#    source: sensor.energy
+#    name: Monthly Energy
+#    cycle: monthly
+#    tariffs:
+#      - peak
+#      - offpeak

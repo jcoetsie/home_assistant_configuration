@@ -1,0 +1,46 @@
+velux:
+  scene:
+    - id: "1588057143121"
+      name: bedroom ventilation small
+      entities:
+        cover.velux_straat:
+          state: open
+          current_position: 10
+  cover:
+    - platform: group
+      name: velux straat
+      entities:
+        - cover.velux_straat_1
+        - cover.velux_straat_2
+        - cover.velux_straat_3
+        - cover.velux_straat_4
+    - platform: group
+      name: Slaapkamer Velux Rolluiken
+      entities:
+        - cover.rolluik_straat_1
+        - cover.rolluik_straat_2
+        - cover.rolluik_straat_3
+        - cover.rolluik_straat_4
+        - cover.rolluik_tuin_1
+        - cover.rolluik_tuin_2
+    - platform: group
+      name: Velux Kantoor
+      entities:
+        - cover.velux_kantoor_links
+        - cover.velux_kantoor_midden
+        - cover.velux_kantoor_rechts
+
+  automation:
+    - id: "Velux - Slaapkamer - Verluchting"
+      alias: Verluchting Slaapkamer
+      trigger:
+        - platform: time
+          at: "11:00:00"
+      action:
+        - service: scene.apply
+          entity_id: scene.bedroom_ventilation_small
+        - delay: 01:00:00
+        - service: cover.set_cover_position
+          entity_id: cover.velux_straat
+          data:
+            position: 0

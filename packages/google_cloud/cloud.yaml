@@ -1,0 +1,93 @@
+google_cloud_cloud:
+
+  cloud:
+    google_actions:
+      filter:
+        include_domains:
+          - light
+          - media_player
+          - climate
+      entity_config:
+        climate.living:
+          name: leefruimte
+          aliases:
+            - keuken
+            - living
+            - gezinsruimte
+            - tv ruimte
+          room: keuken
+        switch.zwembadpomp:
+          name: Zwembad pomp
+          aliases:
+            - zwembad
+            - pool
+            - pomp
+          room: terras
+        light.keukentafel_licht:
+          name: Keuken Tafel licht
+          aliases:
+            - keuken lichten
+            - tafel licht
+          room: Keuken
+        light.keukeneiland:
+          name: Keukeneiland licht
+          aliases:
+            - eiland licht
+            - eiland
+            - werkeiland
+            - pompbak licht
+          room: Keuken
+        light.keukenkast:
+          name: Keukenkast licht
+          aliases:
+            - keukenwand licht
+            - keukenwand
+            - eiken wand
+            - ovenwand
+            - frigolicht
+          room: Keuken
+
+        light.dc4f22c06ecb_192_168_1_75:
+          name: Dampkap
+          aliases:
+            - dampkap verlichting
+            - kooklicht
+          room: Keuken
+        light.douche_2:
+          name: Douche
+          aliases:
+            - douche licht
+            - douche verlichting
+            - badkamer marie
+          room: Douche
+        light.slaapkamer_marie:
+          name: Slaapkamer Marie
+          aliases:
+            - slaapkamer beneden
+            - marie
+          room: Slaapkamer Marie
+        light.gang:
+          name: Gang
+          aliases:
+            - nachthal
+          room: Gang
+        light.living:
+          name: Living
+          aliases:
+            - tv kamer
+            - woonkamer
+            - zitkamer
+          room: living
+        switch.badkamer:
+          name: Badkamer
+          aliases:
+            - badkamer
+          room: badkamer
+        switch.bijkeuken:
+          name: Bijkeuken
+          aliases:
+            - bijkeuken
+            - bij keuken
+            - wasruimte
+            - wasplaats
+          room: bijkeuken

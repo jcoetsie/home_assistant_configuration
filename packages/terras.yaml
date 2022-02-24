@@ -1,0 +1,7 @@
+terras:
+  # Example configuration.yaml entry
+  device_tracker:
+    - platform: unifi_direct
+      host: YOUR_AP_IP_ADDRESS
+      username: YOUR_USERNAME
+      password: YOUR_PASSWORD

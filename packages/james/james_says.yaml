@@ -1,0 +1,5 @@
+# james_says:
+#   script:
+#     james_says:
+#       alias: James says something
+#       sequence:

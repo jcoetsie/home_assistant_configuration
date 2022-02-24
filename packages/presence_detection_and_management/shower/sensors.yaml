@@ -1,0 +1,11 @@
+presence_detection_and_management_shower:
+  binary_sensor:
+    - platform: mqtt
+      name: "Douche PIR Sensor"
+      payload_on: "078A0C"
+      off_delay: 60
+      device_class: motion
+      state_topic: "tele/tasmota_CAD1AE/RESULT"
+      value_template: "{{ value_json.RfReceived.Data }}"
+
+

@@ -1,0 +1,101 @@
+presence_sensors:
+  #AC4A0C Vrij - vroeger douche
+  #1AF20C Voordeur
+  #BDEA8F
+  #36BC83
+  #078A0C Douche
+  #F78A0C Gang
+  #60F20C Bijkeuken
+  #DDD30E Deur kantoor
+  #DDD30A Deur kantoor
+  #48F20C Toilet gasten
+  #08F20C Badkamer
+
+  #via 433 bridge in gang
+
+  input_boolean:
+    gang_licht_automatisch:
+      name: Automatisch gang licht
+      initial: on
+  #    icon: mdi:car
+    laundryroom_presence_override:
+      name: Disable presence based lights for 2 hours
+      initial: off
+
+  automation:
+    - id: GANG - MOVEMENT - LIGHT ON
+      alias: GANG - MOVEMENT - LIGHT ON
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.gang_pir_sensor
+          to: "on"
+        - platform: state
+          entity_id: binary_sensor.office_door_sensor
+          to: "on"
+      condition:
+        condition: "or"
+        conditions:
+          - condition: numeric_state
+            entity_id: sensor.pastorale_cloud_coverage
+            above: 50
+          - condition: sun
+            after: sunset
+            after_offset: "-01:00:00"
+      action:
+        - service: light.turn_on
+          entity_id: light.gang
+    - id: GANG - MOVEMENT - LIGHT OFF
+      alias: GANG - MOVEMENT - LIGHT OFF
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.gang_pir_sensor
+          to: "off"
+      condition:
+        condition: state
+        entity_id: input_boolean.gang_licht_automatisch
+        state: "on"
+      action:
+        - service: light.turn_off
+          entity_id: light.gang
+
+    - id: "toilet licht"
+      alias: Toilet - Licht
+      description: Licht in toilet aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light.yaml
+        input:
+          no_motion_wait: "240"
+          motion_entity: binary_sensor.toilet_gasten_pir_sensor
+          light_target:
+            entity_id: light.toilet
+    - id: "Voordeur licht"
+      alias: Voordeur - Licht
+      description: Licht aan voordeur aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light.yaml
+        input:
+          no_motion_wait: "60"
+          motion_entity: binary_sensor.voordeur_pir_sensor
+          light_target:
+            entity_id: light.voordeur_licht
+    - id: "Bijkeuken licht"
+      alias: Bijkeuken - Licht
+      description: Licht aan bijkeuken aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light_with_condition.yaml
+        input:
+          no_motion_wait: "60"
+          motion_entity: binary_sensor.bijkeuken_pir_sensor
+          light_target:
+            entity_id: light.bijkeuken
+          check_target: input_boolean.laundryroom_presence_override
+    - id: "Badkamer licht"
+      alias: Badkamer - Licht
+      description: Licht aan badkamer aan /uit via pir
+      use_blueprint:
+        path: homeassistant/motion_light.yaml
+        input:
+          no_motion_wait: 120
+          motion_entity: binary_sensor.badkamer_pir_sensor
+          light_target:
+            entity_id: light.badkamer

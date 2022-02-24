@@ -1,0 +1,60 @@
+plants_planten:
+  plant:
+    monstera:
+      sensors:
+        moisture: sensor.monstera_vochtigheid
+        #battery: sensor.my_sensor_battery
+        temperature: sensor.monstera_temperatuur
+        conductivity: sensor.monstera_grond_geleidbaarheid
+        brightness: sensor.monstera_lumen
+      min_moisture: 15
+      max_moisture: 60
+      min_temperature: 12
+      max_temperature: 32
+      min_brightness: 800
+      max_brightness: 15000
+      min_conductivity: 350
+      max_conductivity: 2000
+    calathea_zebrina:
+      sensors:
+        moisture: sensor.calathea_zebrina_vochtigheid
+        #battery: sensor.my_sensor_battery
+        temperature: sensor.calathea_zebrina_temperatuur
+        conductivity: sensor.calathea_zebrina_grond_geleidbaarheid
+        brightness: sensor.calathea_zebrina_lumen
+      min_moisture: 15
+      max_moisture: 65
+      min_temperature: 12
+      max_temperature: 32
+      min_brightness: 800
+      max_brightness: 20000
+      min_conductivity: 350
+      max_conductivity: 1000
+    ficus_benjamina:
+      sensors:
+        moisture: sensor.ficus_benjamina_vochtigheid
+        #battery: sensor.my_sensor_battery
+        temperature: sensor.ficus_benjamina_temperatuur
+        conductivity: sensor.ficus_benjamina_grond_geleidbaarheid
+        brightness: sensor.ficus_benjamina_lumen
+      min_moisture: 20
+      max_moisture: 60
+      min_temperature: 8
+      max_temperature: 32
+      min_brightness: 25000
+      max_brightness: 35000
+      min_conductivity: 350
+      max_conductivity: 2000
+
+  automation:
+    - id: "PLANT - PROBLEM"
+      alias: "PLANT - PROBLEM"
+      trigger:
+        platform: state
+        entity_id: plant.calathea_zebrina
+        to: problem
+      #      value_template: "{{ state.attributes.battery }}"
+      action:
+        service: notify.mobile_app_iphone_van_kristel
+        data:
+          message: "Hi, Calathea in de living needs some love..."

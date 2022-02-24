@@ -1,0 +1,15 @@
+# media_living:
+#   media_player:
+#     - platform: samsungtv_smart
+#       host: 192.168.1.20
+#       port: 8001
+#       api_key: c756cea1-01d0-43e7-8059-f96080b32bb0
+#       device_id: f5761ec0-59e9-4e38-8f1e-84a56ad59c32
+#       mac: d4:9d:c0:80:3b:26
+#       name: frame living
+#       update_method: smartthings
+#       show_channel_number: true
+#       scan_app_http: true
+#       show_logos: true
+#       is_frame_tv: true
+#       app_list: '{"Youtube": "9Ur5IzDKqV.TizenYouTube", "Netflix": "RN1MCdNq8t.Netflix", "Plex": "kIciSQlYEM.plex", "Spotify": "rJeHak5zRg.Spotify", "Apple TV": "com.samsung.tv.aria-video", "TV Vlaanderen": "HzyRLsqqsB.tvv"}'

@@ -1,0 +1,137 @@
+lightswitch_controller_device:
+  sensor:
+    - platform: mqtt
+      name: Lightswitch Controller East Temperature
+      state_topic: east/tele/f5402b
+      value_template: "{{ value_json.temperature }}"
+  script:
+    play_vinyl_in_kitchen:
+      alias: Speel vinyl af
+      sequence:
+        - service: media_player.select_source
+          target:
+            entity_id: media_player.kitchen
+          data:
+            source: "Turntable: Living: Living"
+        - service: media_player.media_play
+          target:
+            entity_id: media_player.kitchen
+    play_radio1_in_kitchen:
+      alias: Speel Radio 1 af
+      sequence:
+        - service: media_player.select_source
+          data:
+            entity_id: media_player.kitchen
+            source: "VRT Radio 1"
+        - service: media_player.media_play
+          data:
+            entity_id: media_player.kitchen
+  automation:
+    - mode: parallel
+      alias: Light Switch Controller East - Single
+      description: Light Switch Controller East - Single
+      variables:
+        switch_mapping: [
+            # switch 1 raam keuken
+            group.kitchen_lights, #1
+            light.living_ceiling, #2
+            light.luster_mezzanine, #3
+            light.keukentafel, #4
+            # switch 2 living
+
+            # switch 3 haard
+            # switch 4 trap
+            # switch 5 keukenraam
+            # switch 6 trap bijkeuken
+            # switch 7 mezzanine
+            # switch 8 slaapkamer bed man
+            # switch 9 slaapkamer bed vrouw
+            # switch 10 Slaapkamer Marie
+            # switch 11 Speelkamer Marie
+          ]
+      trigger:
+        - platform: mqtt
+          topic: "east/stat/f5402b"
+          payload: "single"
+          value_template: "{{ value_json.event }}"
+      action:
+        - service: homeassistant.toggle
+          data_template:
+            entity_id: >
+              {% set index = trigger.payload_json.index %}
+              {% set light = switch_mapping[index - 1] %}
+              {{light}}
+    - mode: parallel
+      alias: Light Switch Controller East - double
+      description: Light Switch Controller East - double
+      variables:
+        switch_mapping: [
+            # switch 1 raam keuken
+            script.play_vinyl_in_kitchen, #1
+            script.play_vinyl_in_kitchen, #2
+            light.slaapkamer_sfeerlamp, #3
+            script.play_radio1_in_kitchen, #4
+            # switch 2 living
+
+            # switch 3 haard
+            # switch 4 trap
+            # switch 5 keukenraam
+            # switch 6 trap bijkeuken
+            # switch 7 mezzanine
+            # switch 8 slaapkamer bed man
+            # switch 9 slaapkamer bed vrouw
+            # switch 10 Slaapkamer Marie
+            # switch 11 Speelkamer Marie
+          ]
+      trigger:
+        - platform: mqtt
+          topic: "east/stat/f5402b"
+          payload: "double"
+          value_template: "{{ value_json.event }}"
+      action:
+        - service: homeassistant.toggle
+          data_template:
+            entity_id: >
+              {% set index = trigger.payload_json.index %}
+              {% set light = switch_mapping[index - 1] %}
+              {{light}}
+    - mode: parallel
+      alias: Light Switch Controller East - Hold
+      description: Light Switch Controller East - Hold
+      variables:
+        switch_mapping: [
+            # switch 1 raam keuken
+            script.play_vinyl_in_kitchen, #1
+            light.gang, #2
+            light.slaapkamer_sfeerlamp, #3
+            group.kitchen_lights, #4
+            # switch 2 living
+
+            # switch 3 haard
+            # switch 4 trap
+            # switch 5 keukenraam
+            # switch 6 trap bijkeuken
+            # switch 7 mezzanine
+            # switch 8 slaapkamer bed man
+            # switch 9 slaapkamer bed vrouw
+            # switch 10 Slaapkamer Marie
+            # switch 11 Speelkamer Marie
+          ]
+      trigger:
+        - platform: mqtt
+          topic: "east/stat/f5402b"
+          payload: "hold"
+          value_template: "{{ value_json.event }}"
+      action:
+        - service: homeassistant.toggle
+          data_template:
+            entity_id: >
+              {% set index = trigger.payload_json.index %}
+              {% set light = switch_mapping[index - 1] %}
+              {{light}}
+
+  # button	single, double, triple, quad, penta, or hold
+  # contact	open or closed
+  # rotary	up or down
+  # switch	on or off
+  # toggle	toggle

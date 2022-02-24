@@ -1,0 +1,45 @@
+lights_kitchen:
+  group:
+    keuken:
+      name: Keuken Lichten
+      entities:
+        - light.keukentafel
+        - light.keukeneiland
+        - light.keukenkast
+
+  scene:
+    - name: Koken
+      entities:
+        light.keukeneiland:
+          state: "on"
+          brightness: 254
+        light.keukenkast:
+          state: "on"
+          brightness: 75
+        light.keukentafel:
+          state: "on"
+          brightness: 75
+        media_player.kitchen_2:
+          state: "on"
+          media_content_id: "hls-radio://https://live-radio-cf-vrt.akamaized.net/groupc/live/f404f0f3-3917-40fd-80b6-a152761072fe/live.isml/.m3u8?"
+          volume_level: 0.1
+    - name: Eten
+      entities:
+        light.keukeneiland:
+          state: "on"
+          brightness: 70
+        light.keukenkast:
+          state: "on"
+          brightness: 70
+        light.keukentafel:
+          state: "on"
+          brightness: 254
+        media_player.frame_living:
+          state: "off"
+          volume_level: 0
+        media_player.kitchen_2:
+          state: "on"
+          media_content_id: "hls-radio://https://live-radio-cf-vrt.akamaized.net/groupc/live/f404f0f3-3917-40fd-80b6-a152761072fe/live.isml/.m3u8?"
+          volume_level: 0.15
+        switch.galaxy_tab_s3:
+          state: "off"

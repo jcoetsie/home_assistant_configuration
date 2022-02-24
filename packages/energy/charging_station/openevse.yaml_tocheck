@@ -1,0 +1,25 @@
+energy_charging_station_openevse:
+  # Example configuration.yaml entry
+  sensor:
+    - platform: openevse
+      host: 192.168.1.111
+      monitored_variables:
+        - status
+        - charge_time
+        - rtc_temp
+        - ir_temp
+        - ambient_temp
+        - usage_session
+        - usage_total
+    - platform: mqtt
+      name: "Car Charger Frontdoor Status"
+      state_topic: "openevse/state"
+      value_template: >-
+        {% set mapper =  {
+            '1' : 'Ready',
+            '2' : 'Connected',
+            '3' : 'Charging',
+            '4' : 'Error',
+            '254' : 'Pauzed' } 
+        %}
+        {{ mapper[value] if value in mapper else 'Unknown' }}

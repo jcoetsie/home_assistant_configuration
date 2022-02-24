@@ -1,0 +1,96 @@
+energy_heating_thermostats_master_bedroom:
+  climate:
+    - platform: generic_thermostat
+      name: Master Bedroom
+      heater: group.slaapkamer_radiatoren
+      target_sensor: sensor.slaapkamer_temperatuur
+      min_temp: 15
+      max_temp: 23
+      ac_mode: false
+      target_temp: 16
+      cold_tolerance: 0.3
+      hot_tolerance: 0.3
+      min_cycle_duration:
+        seconds: 5
+      keep_alive:
+        minutes: 3
+      initial_hvac_mode: heat
+      away_temp: 16
+      precision: 0.5
+
+  input_select:
+    master_bedroom_climate:
+      name: Master Bedroom Climate
+      options:
+        - vacation
+        - away
+        - home
+        - boost
+        - night
+      initial: away
+      icon: mdi:target
+  scene:
+    - id: "sunset ventilation"
+      name: sunset ventilation
+      entities:
+        cover.velux_straat_1:
+          state: open
+          current_position: 100
+        cover.velux_straat_2:
+          state: open
+        cover.velux_straat_3:
+          state: open
+          current_position: 100
+        cover.velux_straat_4:
+          state: open
+
+  automation:
+    - id: "Master Bedroom Climate Management"
+      alias: "CLIMATE - MASTER BEDROOM"
+      trigger:
+        - platform: state
+          entity_id: input_select.master_bedroom_climate
+      action:
+        - service: script.turn_on
+          entity_id: script.set_room_temperature
+          data:
+            variables:
+              thermostat: master_bedroom
+              climate_mode: "{{ states('input_select.master_bedroom_climate') }}"
+
+    - id: "Master Bedroom Climate Management - boost management"
+      alias: "CLIMATE - MASTER BEDROOM - BOOST"
+      trigger:
+        - platform: state
+          entity_id: input_select.master_bedroom_climate
+          to: boost
+          for: "01:00:00"
+      action:
+        - service: input_select.select_option
+          target:
+            entity_id: input_select.master_bedroom_climate
+          data:
+            option: home
+    #############################################
+    # HEATNG AUTOMATION - SLAAPKAMER - SCHEDULE #
+    #############################################
+    - id: SLAAPKAMER - OPEN WINDOW - NO HEATING
+      alias: "CLIMATE - MASTER BEDROOM - WINDOW OPEN"
+      trigger:
+        - platform: state
+          entity_id: cover.velux_straat
+          to: open
+      action:
+        - service: climate.turn_off
+          entity_id: climate.slaapkamer
+
+    - id: SLAAPKAMER - CLOSED WINDOW - HEATING
+      alias: "CLIMATE - MASTER BEDROOM - WINDOW CLOSED"
+      trigger:
+        - platform: state
+          entity_id: cover.velux_straat
+          to: closed
+      action:
+        - service: climate.turn_on
+          entity_id: climate.slaapkamer
+

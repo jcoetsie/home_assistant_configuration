@@ -1,0 +1,129 @@
+pool_zwembad:
+  input_boolean:
+    swim_season:
+      name: Swim Season
+    winter_water_circulation:
+      name: Winter Water Circulation
+  #climate:
+  #  - platform: generic_thermostat
+  #    name: Jacuzzi
+  #    heater: switch.study_heater
+  #    target_sensor: sensor.study_temperature
+
+  sensor:
+    - platform: history_stats
+      name: Poolpump on today
+      entity_id: switch.pool
+      state: "on"
+      type: time
+      start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+      end: "{{ now() }}"
+  # Example configuration.yaml entry
+  binary_sensor:
+    - platform: trend
+      sensors:
+        pool_temperature_trend:
+          entity_id: sensor.zwembad_temperature
+  automation:
+    - id: Zwembad - Zomer - Pomp Aan
+      alias: Zwembad - Zomer - Pomp Aan
+      description: ""
+      trigger:
+        - at: 01:00:00
+          platform: time
+      condition:
+        - condition: state
+          entity_id: input_boolean.swim_season
+          state: "on"
+      action:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          type: turn_on
+    - id: Zwembad - Zomer - Pomp Uit
+      alias: Zwembad - Zomer - Pomp Uit
+      description: ""
+      trigger:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          for:
+            hours: 5
+            minutes: 0
+            seconds: 0
+          platform: device
+          type: turned_on
+      condition:
+        - condition: state
+          entity_id: input_boolean.swim_season
+          state: "on"
+      action:
+        - service: switch.turn_off
+          entity_id: switch.pool
+    - id: Zwembad - 30 graden - Pomp Aan
+      alias: zwembad - 30 graden pomp aan
+      description: ""
+      trigger:
+        - above: 29
+          entity_id: weather.pastorale_buienradar
+          value_template: "{{state.attributes.temperature}}"
+          platform: numeric_state
+      condition:
+        - condition: state
+          entity_id: input_boolean.swim_season
+          state: "on"
+      action:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          type: turn_on
+    - id: Zwembad - Apple Watch - Pomp Toggle
+      trigger:
+        - platform: event
+          event_type: ios.action_fired
+          event_data:
+            source: watch
+            actionName: Zwembadpomp
+      action:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          type: toggle
+    - id: Zwembad - Winter - Pomp Aan
+      alias: Zwembad - Winter - Pomp Aan
+      description: ""
+      trigger:
+        - at: 01:00:00
+          platform: time
+      condition:
+        - condition: state
+          entity_id: input_boolean.swim_season
+          state: "off"
+        - condition: state
+          entity_id: input_boolean.winter_water_circulation
+          state: "on"
+      action:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          type: turn_on
+    - id: Zwembad - Winter - Pomp Uit
+      alias: Zwembad - 1r - Pomp Uit
+      description: ""
+      trigger:
+        - device_id: 677e940aa532421ea07e8dee0daa2d2b
+          domain: switch
+          entity_id: switch.pool
+          for:
+            hours: 2
+            minutes: 0
+            seconds: 0
+          platform: device
+          type: turned_on
+      condition:
+        - condition: state
+          entity_id: input_boolean.swim_season
+          state: "off"
+      action:
+        - service: switch.turn_off
+          entity_id: switch.pool

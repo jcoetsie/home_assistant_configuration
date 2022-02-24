@@ -1,0 +1,37 @@
+cooking_hood_light:
+  automation:
+    - id: "1588191058433"
+      alias: LIGHT - HOOD - ON - SYNC
+      description: ""
+      trigger:
+        - entity_id: switch.kookplaat
+          platform: state
+          to: "on"
+      condition: []
+      action:
+        - data:
+            brightness: 255
+            white_value: 255
+            color_name: white
+          entity_id: light.dc4f22c06ecb_192_168_1_75
+          service: light.turn_on
+      initial_state: true
+
+    - id: "1589303708854"
+      alias: LIGHT - HOOD - OUT - DELAY
+      description: ""
+      trigger:
+        - device_id: 5d556a93bf314963a28cd715170532b6
+          domain: switch
+          entity_id: switch.kookplaat_power
+          for:
+            hours: 0
+            minutes: 30
+            seconds: 0
+          platform: device
+          type: turned_off
+      condition: []
+      action:
+        - data: {}
+          entity_id: light.dc4f22c06ecb_192_168_1_75
+          service: light.turn_off

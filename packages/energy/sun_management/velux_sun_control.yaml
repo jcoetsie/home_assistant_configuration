@@ -1,0 +1,38 @@
+energy_sun_management_velux_sun_control:
+  #
+  # Idee: controleer climaat in slaapkamer adhv velux rolluiken en ventilatie
+  #
+  # Gelet op een basis temperatuur voor de kamer: 18°C
+  # 
+  # Indien lager, gebruik de zon om temperatuur te verhogen
+  # Indien hoger, gebruik rolluiken om temperatuur te verlagen
+  # 
+  # Ventilatie
+  # 
+  # Indien buiten warm, geen ventilatie
+  # 
+  # 
+
+  # define an input boolean to define cooling or heating
+
+  # Azimiut 119 - 300 sun om front roof
+  # sunrise to Azimut 145 sun on back roof
+  # sunrise to azimit 260 sun on office velux
+
+  # SLAAPKAMER PROCESS
+
+  # when weather says sunny
+
+  cover:
+    - platform: group
+      name: Orangery Sun Blinds
+      entities:
+        - cover.zonnewering_kantoor_links
+        - cover.zonnewering_kantoor_midden
+        - cover.zonnewering_kantoor_rechts
+    - platform: group
+      name: Orangery Velux Windows
+      entities:
+        - cover.velux_kantoor_links
+        - cover.velux_kantoor_midden
+        - cover.velux_kantoor_rechts

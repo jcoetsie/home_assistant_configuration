@@ -1,0 +1,114 @@
+doorbel_setup:
+  binary_sensor:
+    - platform: mqtt
+      name: "Deurbel"
+      payload_on: "ON"
+      payload_off: "OFF"
+      off_delay: 10
+      device_class: door
+      state_topic: "stat/tasmota_973590/RESULT"
+      value_template: "{{ value_json.Switch1.Action }}"
+
+  input_boolean:
+    dingdong_ringer:
+      name: dingdong helper
+  ios:
+    push:
+      categories:
+        - name: Doorbel cam with actions
+          identifier: "camera"
+          actions:
+            - identifier: "STOP_BEL"
+              title: "ZWIJG"
+            # - identifier: "GARAGE_OPEN"
+            #  title: "OPEN GARAGE"
+            #- identifier: "GARAGE_SLUITEN"
+            #  title: "SLUIT GARAGE"
+
+  automation:
+    - id: "Deurbel management"
+      alias: "DOORBEL - DING DONG"
+      mode: restart
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.deurbel
+          to: "on"
+      action:
+        - service: system_log.write
+          data:
+            message: "Doorbel is pressed!"
+            level: info
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.dingdong_ringer
+        - service: notify.mobile_app_iphone
+          data:
+            message: "Er is iemand aan de voordeur"
+            title: "Ding Dong"
+            data:
+              attachment:
+                content-type: jpeg
+              push:
+                category: camera
+              entity_id: camera.terras_2
+        - service: notify.mobile_app_iphone_van_kristel
+          data:
+            message: "Er is iemand aan de voordeur"
+            title: "Ding Dong"
+            data:
+              attachment:
+                content-type: jpeg
+              push:
+                category: camera
+              entity_id: camera.terras_2
+        - choose:
+            - conditions:
+                - condition: state
+                  entity_id: group.family
+                  state: home
+              sequence:
+                - service: sonos.snapshot
+                  entity_id: all
+                - service: media_player.volume_set
+                  entity_id:
+                    - media_player.kantoor
+                    - media_player.kitchen_2
+                    #- media_player.bathroom
+                  data:
+                    volume_level: 0.4
+                - alias: repeat until motion on front door or manual stop
+                  repeat:
+                    sequence:
+                      - service: media_player.play_media
+                        data:
+                          entity_id: media_player.kantoor
+                          media_content_id: "http://192.168.1.5:8123/local/audio/voordeurbel.mp3"
+                          media_content_type: music
+                      - delay:
+                          milliseconds: 6000
+                    until:
+                      - condition: or
+                        conditions:
+                          - condition: state
+                            entity_id: binary_sensor.voordeur_pir_sensor
+                            state: "on"
+                          - condition: state
+                            entity_id: input_boolean.dingdong_ringer
+                            state: "off"
+                - service: input_boolean.turn_off
+                  entity_id: input_boolean.dingdong_ringer
+                - service: sonos.restore
+                  entity_id:
+                    - media_player.kantoor
+                    - media_player.kitchen_2
+                    - media_player.bathroom
+
+    - id: "handle doorbel zwijg"
+      alias: "DOORBEL - SILENCE"
+      trigger:
+        platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: STOP_BEL
+      action:
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.dingdong_ringer

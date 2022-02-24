@@ -1,0 +1,147 @@
+home_and_away_home_and_away:
+  group:
+    family:
+      name: Familie
+      entities:
+        - person.jurgen_coetsiers
+        - person.kristel_bekaert
+  sensor:
+    - platform: history_stats
+      name: Kristel op werk
+      entity_id: person.kristel_bekaert
+      state: "Werk Kristel"
+      type: time
+      start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+      end: "{{ now() }}"
+  input_select:
+    home_modus:
+      name: Home Modus
+      options:
+        - Normaal
+        - Babysit
+        - Logees
+        - Vakantie
+      initial: Normaal
+      icon: mdi:home-assistant
+
+  automation:
+    - id: check garagedoor when away or after some time
+      alias: check garagedoor when away or after some time
+      trigger:
+        - platform: state
+          id: "gone"
+          entity_id: group.family
+          to: "not_home"
+        - platform: state
+          id: "forgotten"
+          entity_id: cover.garage_door
+          state: "open"
+          for:
+            minutes: 30
+      condition:
+        condition: state
+        entity_id: cover.garage_door
+        state: "open"
+      action:
+        - alias: "Set up variables for the actions"
+          variables:
+            # Including an id in the action allows us to identify this script run
+            # and not accidentally trigger for other notification actions
+            action_open: "{{ 'OPEN_GARAGE_' ~ context.id }}"
+            action_close: "{{ 'CLOSE_GARAGE' ~ context.id }}"
+        - alias: "Ask to close the garage"
+          service: notify.mobile_app_iPhoneJurgen
+          data:
+            message: "The garage is open. Do you want to close it?"
+            data:
+             # push:
+             #   sound:
+             #     name: "default"
+             #     critical: 1
+             #     volume: 1.0
+              actions:
+                - action: "{{ action_close }}"
+                  title: Close Garage
+        - alias: "Wait for a response"
+          wait_for_trigger:
+            - platform: event
+              event_type: mobile_app_notification_action
+              event_data:
+                # waiting for the specific action avoids accidentally continuing
+                # for another script/automation's notification action
+                action: "{{ action_open }}"
+            - platform: event
+              event_type: mobile_app_notification_action
+              event_data:
+                action: "{{ action_close }}"
+        - alias: "Perform the action"
+          choose:
+            - conditions: "{{ wait.trigger.event.data.action == action_open }}"
+              sequence:
+                - service: cover.open_cover
+                  target:
+                    entity_id: cover.garage_door
+            - conditions: "{{ wait.trigger.event.data.action == action_close }}"
+              sequence:
+                - service: cover.close_cover
+                  target:
+                    entity_id: cover.garage_door
+
+
+
+
+
+
+    - id: going away mode
+      alias: going away mode
+      trigger:
+        platform: state
+        entity_id: group.family
+        to: "not_home"
+      action:
+        # SET HEATING TO AWAY
+        # TODO: Other climate controllers
+        - service: climate.set_preset_mode
+          data:
+            entity_id: climate.living
+            preset_mode: away
+        - service: light.turn_off
+          data:
+            entity_id: all
+        - service: media_player.media_pause
+          entity_id: all
+    - id: heating - coming home mode
+      alias: heating - coming home mode
+      trigger:
+        platform: state
+        entity_id: group.family
+        to: "home"
+      condition:
+        condition: time
+        before: "22:00:00"
+      action:
+        - service: climate.set_preset_mode
+          data:
+            entity_id: climate.living
+            preset_mode: none
+        - service: climate.turn_on
+          entity_id: climate.living
+        - service: climate.set_temperature
+          data:
+            entity_id: climate.living
+            temperature: 21
+            hvac_mode: heat
+    - id: light - coming home mode after sunset
+      alias: light - coming home mode after sunset
+      trigger:
+        platform: state
+        entity_id: group.family
+        to: "home"
+      condition:
+        condition: sun
+        after: sunset
+        after_offset: "-1:00:00"
+      action:
+        - service: light.turn_on
+          data:
+            entity_id: light.gang, light.keuken_eiland

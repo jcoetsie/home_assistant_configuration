@@ -1,0 +1,10 @@
+kitchendash:
+
+  switch:
+    - platform: command_line
+      switches:
+        keuken_touchscherm:
+          command_on: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i /config/kitchendash.pub pi@192.168.1.21 "sudo reboot now"
+          #command_off: switch_command off kitchen
+
+
