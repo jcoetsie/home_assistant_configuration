@@ -1,64 +1,95 @@
-'1521490428724':
-  alias: go to sleep
+say2:
+  alias: Text To Speech
+  fields:
+    where:
+      description: Media Player Entity
+    what:
+      description: text to say
   sequence:
-  - data:
-      entity_id: group.kitchen_lights
-    service: switch.turn_off
-  - data:
-      entity_id: media_player.playroom
-    service: media_player.media_stop
-  - data:
-      entity_id: media_player.tv
-    service: media_player.turn_off
-  - data:
-      brightness: 10
-      color_temp: 200
-      entity_id: light.tradfri_bulb_e27_ws_opal_980lm
-    service: light.turn_on
-  - data:
-      brightness: 20
-      color_temp: 457
-      entity_id: light.tradfri_bulb_e27_ws_opal_980lm_3
-    service: light.turn_on
-  - data:
-      entity_id: climate.atag_one_thermostat
-      temperature: 15
-    service: climate.set_temperature
-'1521490926014':
-  alias: good morning
+  - service: tts.cloud_say
+    data:
+      entity_id: '{{ ''media_player.'' ~ where }}'
+      message: '{{ what }}'
+      options:
+        gender: female
+      language: nl-NL
+  - delay:
+      seconds: 1
+force_blue_update:
   sequence:
-  - data:
-      entity_id: switch.relay_4
-    service: switch.turn_on
-  - data:
-      entity_id: media_player.playroom
-    service: media_player.media_play
-'1535797410021':
-  alias: Passage Light Timer
+  - service: mqtt.publish
+    data:
+      topic: blueriiot/commands/force_sync
+  mode: single
+  alias: Force Blue Update
+opstaan_kristel_in_de_week:
+  alias: opstaan Kristel in de week
   sequence:
-  - condition: state
-    entity_id: input_boolean.passage_light_timer
-    state: 'on'
-  - delay: 00:01:00
-  - data:
-      entity_id: switch.passage_light
-    service: switch.turn_off
-'1535797410022':
-  alias: Living Front Light Timer
+  - service: light.turn_on
+    target:
+      entity_id: light.sfeerlamp_slaapkamer
+    data:
+      transition: 300
+      brightness_pct: 100
+  - service: cover.open_cover
+    target:
+      entity_id: cover.rolluiken_slaapkamer_boven
+  mode: single
+notify_tesla_open:
+  alias: "Notify when something on the tesla is left open"
   sequence:
-  - condition: state
-    entity_id: input_boolean.living_front_light_timer
-    state: 'on'
-  - delay: 00:05:00
-  - data:
-      entity_id: switch.living_front_light
-    service: switch.turn_off
-'1536049050676':
-  alias: New Script
+    - service: notify.notify_group
+      data_template:
+        title: "Tesla Notification"
+        message: "You have left the {{ whatsopen }} open on the Tesla!"
+    - service: script.turn_on
+      data_template:
+        entity_id: script.notify_tesla_{{ whatsopen }}_open
+
+notify_tesla_doors_open:
   sequence:
-  - condition: state
-    entity_id: sensor.pws_weather
-    state: Geheel bewolkt
-  - data:
-      entity_id: switch.passage_light
-    service: switch.turn_on
+    - delay:
+        minutes: 5
+    - delay:
+        seconds: "{{ range(0, 30)|random|int }}"
+    - service: script.turn_on
+      entity_id: script.notify_tesla_open
+      data:
+        variables:
+          whatsopen: "doors"
+
+notify_tesla_frunk_open:
+  sequence:
+    - delay:
+        minutes: 5
+    - delay:
+        seconds: "{{ range(0, 30)|random|int }}"
+    - service: script.turn_on
+      entity_id: script.notify_tesla_open
+      data:
+        variables:
+          whatsopen: "frunk"
+
+notify_tesla_trunk_open:
+  sequence:
+    - delay:
+        minutes: 5
+    - delay:
+        seconds: "{{ range(0, 30)|random|int }}"
+    - service: script.turn_on
+      entity_id: script.notify_tesla_open
+      data:
+        variables:
+          whatsopen: "trunk"
+
+notify_tesla_windows_open:
+  sequence:
+    - delay:
+        minutes: 5
+    - delay:
+        seconds: "{{ range(0, 30)|random|int }}"
+    - service: script.turn_on
+      entity_id: script.notify_tesla_open
+      data:
+        variables:
+          whatsopen: "windows"

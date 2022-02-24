@@ -1,0 +1,165 @@
+- id: '1587064281619'
+  name: avond tv kijken
+  entities:
+    light.sfeerlamp_living:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 128
+      icon: mdi:floor-lamp
+      friendly_name: Sfeerlamp living
+      supported_features: 32
+      state: 'on'
+    button.sfeerlamp_living_ota_update:
+      device_class: update
+      friendly_name: sfeerlamp living OTA Update
+      state: unknown
+    button.sfeerlamp_living_reboot:
+      device_class: restart
+      friendly_name: sfeerlamp living Reboot
+      state: unknown
+    light.living_ceiling:
+      supported_color_modes:
+      - brightness
+      friendly_name: living ceiling
+      supported_features: 32
+      state: 'off'
+    button.shellydimmer2_e0980694d6fa_ota_update:
+      device_class: update
+      friendly_name: shellydimmer2-E0980694D6FA OTA Update
+      state: unknown
+    button.shellydimmer2_e0980694d6fa_reboot:
+      device_class: restart
+      friendly_name: shellydimmer2-E0980694D6FA Reboot
+      state: unknown
+- id: '1587639600149'
+  name: slapen
+  entities:
+    cover.rolluik_straat_1:
+      current_position: 0
+      device_class: shutter
+      friendly_name: Rolluik straat 1
+      state: closed
+      supported_features: 15
+    cover.rolluik_straat_2:
+      current_position: 0
+      device_class: shutter
+      friendly_name: Rolluik straat 2
+      state: closed
+      supported_features: 15
+    cover.rolluik_straat_3:
+      current_position: 0
+      device_class: shutter
+      friendly_name: Rolluik straat 3
+      state: closed
+      supported_features: 15
+    cover.rolluik_straat_4:
+      current_position: 0
+      device_class: shutter
+      friendly_name: Rolluik straat 4
+      state: closed
+      supported_features: 15
+- id: '1588057143116'
+  name: velux slapen gaan
+  entities:
+    cover.rolluik_straat_1:
+      state: closed
+    cover.rolluik_straat_2:
+      state: closed
+    cover.rolluik_straat_3:
+      state: closed
+    cover.rolluik_straat_4:
+      state: closed
+    cover.rolluik_tuin_1:
+      state: closed
+    cover.rolluik_tuin_2:
+      state: closed
+    cover.velux_straat_3:
+      state: open
+      current_position: 25
+    cover.velux_straat_4:
+      state: open
+      current_position: 25
+    cover.velux_straat_1:
+      state: closed
+    cover.velux_straat_2:
+      state: closed
+- id: '1588057143117'
+  name: velux opstaan
+  entities:
+    cover.rolluik_straat_1:
+      state: open
+    cover.rolluik_straat_2:
+      state: open
+    cover.rolluik_straat_3:
+      state: open
+    cover.rolluik_straat_4:
+      state: open
+    cover.rolluik_tuin_1:
+      state: open
+    cover.rolluik_tuin_2:
+      state: open
+    cover.velux_straat_3:
+      state: open
+      current_position: 100
+    cover.velux_straat_4:
+      state: open
+      current_position: 100
+    cover.velux_straat_1:
+      state: closed
+    cover.velux_straat_2:
+      state: closed
+- id: '1589375817065'
+  name: Dampkap - Koken
+  entities:
+    light.dc4f22c06ecb_192_168_1_75:
+      brightness: 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      state: 'on'
+      white_value: 255
+- id: '1588057143118'
+  name: velux sun front roof
+  entities:
+    cover.rolluik_straat_1:
+      state: closed
+    cover.rolluik_straat_2:
+      state: closed
+    cover.rolluik_straat_3:
+      state: closed
+    cover.rolluik_straat_4:
+      state: closed
+    cover.rolluik_tuin_1:
+      state: open
+    cover.rolluik_tuin_2:
+      state: open
+- id: '1588057143119'
+  name: velux sun back roof
+  entities:
+    cover.rolluik_straat_1:
+      state: open
+    cover.rolluik_straat_2:
+      state: open
+    cover.rolluik_straat_3:
+      state: open
+    cover.rolluik_straat_4:
+      state: open
+    cover.rolluik_tuin_1:
+      state: closed
+    cover.rolluik_tuin_2:
+      state: closed
+- id: '1588057143120'
+  name: bedroom ventilation big
+  entities:
+    cover.velux_straat_1:
+      state: open
+      current_position: 100
+    cover.velux_straat_2:
+      state: closed
+    cover.velux_straat_3:
+      state: open
+      current_position: 100
+    cover.velux_straat_4:
+      state: closed

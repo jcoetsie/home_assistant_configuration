@@ -1,0 +1,273 @@
+title: Pastorale
+kiosk_mode:
+  hide_sidebar: true
+  hide_header: true
+media_art_background:
+  blur: 0px
+  opacity: 0.5
+  transition_opacity: 2s
+  entities:
+    - media_player.kitchen_2
+    - entity: media_player.kitchen_2
+      valid_states: ["playing"]
+      image_attribute: "entity_picture"
+views:
+  - title: VERLICHTING
+    path: verlichting
+    theme: dark-mode
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: picture
+            image: /local/house.png
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/verlichting
+          - type: picture
+            image: /local/climate.png
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-climate/thermostats
+          - type: picture
+            image: /local/backyard.jpg
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace-backyard/zwembad
+          - type: picture
+            image: /local/pic-3.png
+            tap_action:
+              action: navigate
+              navigation_path: /lovelace/3
+
+      - type: vertical-stack #media
+        #  title: Media
+        cards:
+          - type: "custom:mini-media-player"
+            entity: media_player.kitchen_2
+            name: Keuken
+            artwork: cover
+            source: icon
+            speaker_group:
+              entities:
+                - entity_id: media_player.pool
+                  name: Sonos Zwembad
+                - entity_id: media_player.bathroom
+                  name: Sonos Badkamer
+                - entity_id: media_player.kantoor
+                  name: Sonos Kantoor
+              platform: sonos
+              show_group_count: true
+          - type: "custom:mini-media-player"
+            entity: media_player.bathroom
+            name: Badkamer
+            artwork: cover
+            source: icon
+            speaker_group:
+              entities:
+                - entity_id: media_player.pool
+                  name: Sonos Zwembad
+                - entity_id: media_player.kitchen_2
+                  name: Sonos Keuken
+                - entity_id: media_player.kantoor
+                  name: Sonos Kantoor
+              platform: sonos
+              show_group_count: true
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: light
+                tap_action:
+                  action: toggle
+                entity: light.keukentafel
+                icon: "mdi:vanity-light"
+                show_state: true
+              - type: light
+                tap_action:
+                  action: toggle
+                entity: light.keuken_eiland
+                icon: "mdi:lightbulb-group"
+                show_state: true
+              - type: light
+                tap_action:
+                  action: toggle
+                entity: light.keukenkast_2
+                icon: "mdi:lightbulb-group"
+                show_state: true
+              - type: light
+                entity: light.dc4f22c06ecb_192_168_1_75
+                icon: "mdi:led-strip"
+                show_state: true
+          - type: horizontal-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: button
+                    icon: "mdi:lightbulb-group"
+                    tap_action:
+                      action: toggle
+                    entity: light.gang
+                    show_state: true
+              - type: horizontal-stack
+                cards:
+                  - type: button
+                    icon: "mdi:lightbulb-group"
+                    tap_action:
+                      action: toggle
+                    entity: light.bijkeuken
+                    show_state: true
+              - type: horizontal-stack
+                cards:
+                  - type: light
+                    icon: "mdi:lightbulb-group"
+                    tap_action:
+                      action: toggle
+                    entity: light.living
+                    show_state: true
+              - type: horizontal-stack
+                cards:
+                  - type: light
+                    icon: "mdi:vanity-light"
+                    tap_action:
+                      action: toggle
+                    entity: light.luster_mezzanine
+                    show_state: true
+          - type: horizontal-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: button
+                    icon: "mdi:lightbulb-group"
+                    entity: light.badkamer
+                    tap_action:
+                      action: toggle
+                    show_state: true
+                  - type: button
+                    icon: "mdi:lightbulb-group"
+                    entity: light.douche_2
+                    name: Douche
+                    tap_action:
+                      action: toggle
+                    show_state: true
+              - type: horizontal-stack
+                cards:
+                  - type: button
+                    icon: "mdi:lightbulb-group"
+                    entity: light.slaapkamer_marie
+                    tap_action:
+                      action: toggle
+                    show_state: true
+                  - type: button
+                    tap_action:
+                      action: toggle
+                    icon: "mdi:flower-poppy"
+                    entity: light.speelkamer_marie
+                    name: Speelkamer
+                    show_state: true
+          - type: grid
+            columns: 4
+            cards:
+              - type: light
+                tap_action:
+                  action: toggle
+                entity: light.600194956ea9_192_168_1_245
+                icon: "mdi:led-strip"
+                show_state: true
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: light.prive_toilet
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: light.toilet
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                entities:
+                  - input_select.living_climate
+                  - type: attribute
+                    entity: climate.living
+                    attribute: hvac_action
+                    name: Status
+                  - entity: sensor.living_temperatuur
+                    name: Temp
+              - type: entities
+                entities:
+                  - input_select.marie_climate
+                  - type: attribute
+                    entity: climate.marie
+                    attribute: hvac_action
+                    name: Status
+                  - entity: sensor.marie_temperatuur
+                    name: Temp
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                entities:
+                  - input_select.master_bedroom_climate
+                  - type: attribute
+                    entity: climate.master_bedroom
+                    attribute: hvac_action
+                    name: Status
+                  - entity: sensor.slaapkamer_temperatuur
+                    name: Temp
+              - type: entities
+                entities:
+                  - input_select.orangery_climate
+                  - type: attribute
+                    entity: climate.orangery
+                    attribute: hvac_action
+                    name: Status
+                  - entity: sensor.kantoor_temperatuur
+                    name: Temp
+
+
+      - type: vertical-stack #planten weer praktisch
+        cards:
+          - type: horizontal-stack
+            #    title: Planten
+            cards:
+              - type: plant-status
+                entity: plant.calathea_zebrina
+                name: Calathea
+              - type: plant-status
+                entity: plant.monstera
+                name: Monstera
+              - type: plant-status
+                entity: plant.ficus_benjamina
+                name: Ficus
+          - type: horizontal-stack
+            #   title: Weer
+            cards:
+              - entity: weather.pastorale_buienradar
+                name: Pastorale
+                type: weather-forecast
+              - aspect_ratio: 0%
+                camera_image: camera.buienradar_loop
+                entities:
+                  - entity: weather.pastorale_buienradar
+                image: "https://demo.home-assistant.io/stub_config/kitchen.png"
+                title: Weerradar
+                type: picture-glance
+          - type: vertical-stack
+            #  title: Praktisch
+            cards:
+              - type: entities
+                entities:
+                  - entity: sensor.ilva_afvalophaling_vandaag
+                  - entity: sensor.ilva_afvalophaling_morgen
+              - type: glance
+                entities:
+                  - entity: person.kristel_bekaert
+                  - entity: person.jurgen_coetsiers
+                  - entity: group.family
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - cover.rolluiken_slaapkamer_boven
+              - cover.velux_straat
+              - input_boolean.dingdong_ringer

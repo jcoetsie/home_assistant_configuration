@@ -1,0 +1,127 @@
+- platform: mqtt
+  name: "Bedroom Door Sensor"
+  payload_off: "0AC20E"
+  payload_on: "0AC20A"
+  device_class: door
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Bedroom Marie Door"
+  payload_on: "0A640A"
+  payload_off: "0A640E"
+  device_class: door
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+  unique_id: bedroom_marie_door
+
+- platform: mqtt
+  name: "Terras Sliding Window Sensor"
+  payload_off: "0AE00E"
+  payload_on: "0AE00A"
+  device_class: door
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+
+- platform: mqtt
+  name: "Mezzanine Window Sensor"
+  payload_off: "0AE50A"
+  payload_on: "0AE50E"
+  device_class: window
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+
+- platform: mqtt
+  name: "Basement Door Sensor"
+  payload_off: "0AC70A"
+  payload_on: "0AC70E"
+  device_class: door
+  state_topic: "tele/tasmota_B2E966/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+
+- platform: mqtt
+  name: "Cookie Drawer Sensor"
+  payload_off: "7D5D0E"
+  payload_on: "7D5D0A"
+  device_class: opening
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+
+- platform: mqtt
+  name: "Guest Toilet Door"
+  payload_on: "0A630A"
+  payload_off: "0A630E"
+  device_class: door
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+  unique_id: guest_toilet_door
+- platform: mqtt
+  name: "Orangery Window Right"
+  payload_on: "0x112C0A"
+  payload_off: "0x112C0E"
+  device_class: window
+  state_topic: "tele/443BridgeOrangery/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+  unique_id: orangery_window_right
+  #device:
+- platform: mqtt
+  name: "Orangery Outside Door"
+  payload_on: "0x42D80A"
+  payload_off: "0x42D80E"
+  device_class: door
+  state_topic: "tele/443BridgeOrangery/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+  unique_id: orangery_outside_door
+- platform: mqtt
+  name: "Orangery Window Left"
+  payload_on: "0xAE50A"
+  payload_off: "0xAE50E"
+  device_class: window
+  state_topic: "tele/443BridgeOrangery/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+  unique_id: orangery_window_left
+- platform: mqtt
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  name: "Marie Remote A"
+  payload_on: "2E1A11"
+  off_delay: 1
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  name: "Marie Remote B"
+  payload_on: "2E1A12"
+  off_delay: 1
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  name: "Marie Remote C"
+  payload_on: "2E1A14"
+  off_delay: 1
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  name: "Marie Remote D"
+  payload_on: "2E1A18"
+  off_delay: 1
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: template
+  sensors:
+    kookplaat_actief:
+      friendly_name: er wordt gekookt
+      value_template: >
+        {{ is_state_attr('states.switch.kookplaat','operational_state', 'run') }}
+    sun_on_velux_front:
+      friendly_name: Zon op dak vooraan
+      value_template: >
+        {% if state_attr('sun.sun','azimuth') > 125 and  state_attr('sun.sun','azimuth') < 300  and is_state('sun.sun', 'above_horizon') %}
+          true
+        {% else %}
+          false
+        {% endif %}
+    sun_on_velux_back:
+      friendly_name: Zon op dak achteraan
+      value_template: >
+        {% if state_attr('sun.sun','azimuth') < 125 and state_attr('sun.sun','azimuth') < 300  and is_state('sun.sun', 'above_horizon') %}
+          true
+        {% else %}
+          false
+        {% endif %}

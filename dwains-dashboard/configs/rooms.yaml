@@ -1,0 +1,423 @@
+# https://dwainscheeren.github.io/dwains-lovelace-dashboard/configuration/rooms.html
+
+# rooms:
+#   - name: Hallway
+#     icon: mdi:key
+#     light: light.hallway
+#     temperature: sensor.hallway_temperature
+#     climate: climate.hallway_climate
+#     humidity: sensor.halway_humidity
+#     motion: binary_sensor.hallway_sensor_motion
+#     door: binary_sensor.hallway_door_contact
+#     window: binary_sensor.hallway_window_contact
+#     safety: sensor.smoke_sensor
+#     device: switch.television
+#     vacuum:
+#       entity: vacuum.rockrobo
+#       camera: camera.rockrobo_map
+#     plant: plant.hallway_plant
+#     media_player: media_player.awesome_hallway_tv
+#     more_entities:
+#       entities:
+#         - entity: sensor.hallway_motion_battery_level
+#         - entity: sensor.smokedetector_battery
+#   - name: Garage
+#     icon: mdi:garage
+#     light: group.garage_lights
+#     door: group.garage_doors
+#     addons:
+#       - name: Hello room
+#         icon: mdi:puzzle
+#         path: 'dwains-theme/addons/rooms/hello-room/page.yaml'
+#         button_path: 'dwains-theme/addons/rooms/hello-room/button.yaml'
+#         data:
+#           some_data: 'This is some data parsed.'
+#           some_other_data: 'and some other data.'
+#           entity: vacuum.roborock
+#   - name: Bedroom
+#     icon: fal:bed
+#     more_entities:
+#       columns: 2 #optional
+#       entities:
+#         - entity: sensor.name1
+#         - entity: sensor.name2
+#     page_entities:
+#       columns: 1 #optional
+#       entities:
+#         - entity: sensor.name1
+#         - entity: sensor.name2
+
+rooms:
+  - name: Keuken
+    icon: mdi:coffee
+    light: group.kitchen_lights
+
+    temperature: sensor.living_temperatuur
+    climate: climate.living
+    humidity: sensor.living_vochtigheid
+    #motion: binary_sensor.hallway_sensor_motion
+    #door: binary_sensor.hallway_door_contact
+    window: binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #device: switch.television
+    #vacuum:
+    #  entity: vacuum.rockrobo
+    #  camera: camera.rockrobo_map
+    #plant: plant.hallway_plant
+    media_player: media_player.kitchen
+    more_entities:
+      entities:
+        - entity: sensor.oven_duration
+        - entity: sensor.oven_remaining_program_time
+  - name: Living
+    icon: mdi:television
+    light: group.living_lights
+    temperature: sensor.living_temperatuur
+    climate: climate.living
+    humidity: sensor.living_vochtigheid
+    #motion:  binary_sensor.speelkamer_marie_home_security_motion_detection
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #device: media_player.living_tv
+    vacuum:
+      entity: vacuum.james
+      camera: camera.james_cleaning_map
+    plant: group.living_plants
+    media_player: media_player.living_tv
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Bijkeuken
+    icon: mdi:washing-machine
+    light: light.bijkeuken
+
+    #temperature: sensor.living_temperatuur
+    #climate: climate.living
+    #humidity: sensor.living_vochtigheid
+    motion: binary_sensor.bijkeuken_pir_sensor
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #device: switch.television
+    #vacuum:
+    #  entity: vacuum.rockrobo
+    #  camera: camera.rockrobo_map
+    #plant: plant.hallway_plant
+    #media_player: media_player.bathroom
+    page_entities:
+      entities:
+        - entity: input_boolean.laundryroom_presence_override
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+
+  - name: Orangerie
+    icon: mdi:office-building
+    #light: light.toilet
+    temperature: sensor.kantoor_temperatuur_2
+    climate: climate.orangery_smart
+    humidity: sensor.kantoor_vochtigheid
+    #motion: binary_sensor.motion_terras
+    door: group.orangery_doors
+    window: group.orangery_windows
+    plant: plant.monstera
+    #safety: sensor.smoke_sensor
+    cover: cover.orangery_sun_blinds
+    media_player: media_player.kantoor
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+    addons:
+      - name: Printer
+        icon: mdi:printer
+        path: "dwains-dashboard/addons/rooms/orangery/printer/page.yaml"
+        button_path: "dwains-dashboard/addons/rooms/orangery/printer/button.yaml"
+        data:
+          printer:
+            - entity: sensor.mfc_j5720dw_status
+              name: State
+            - entity: sensor.mfc_j5720dw_b_w_counter
+              name: Total printed pages b/w
+            - entity: sensor.mfc_j5720dw_color_counter
+              name: Total printed pages color
+            - entity: sensor.mfc_j5720dw_page_counter
+              name: Total printed pages
+          cardridges:
+            - entity: sensor.mfc_j5720dw_black_toner_remaining
+              name: Zwart
+              color: Black
+            - entity: sensor.mfc_j5720dw_cyan_toner_remaining
+              name: Cyaan
+              color: MediumTurquoise
+            - entity: sensor.mfc_j5720dw_magenta_toner_remaining
+              name: Magenta
+              color: MediumOrchid
+            - entity: sensor.mfc_j5720dw_yellow_toner_remaining
+              name: Geel
+              color: Gold
+  - name: Gang
+    icon: mdi:hanger
+    light: light.gang
+    #temperature: sensor.garage_temperatuur
+    #climate: climate.master_bedroom
+    #humidity: sensor.garage_vochtigheid
+    motion: binary_sensor.gang_pir_sensor
+    #door: binary_sensor.basement_door_sensor
+    #window: binary_sensor.mezzanine_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.garage_door
+    #media_player: media_player.kantoor
+    #page_entities:
+    #  entities:
+    #    - entity: sensor.spa_guidance
+    #    - entity: sensor.spa_salinity_status
+    #    - entity: sensor.spa_ph_status
+    #    - entity: sensor.spa_orp_status
+  #BEDROOMS
+  - name: Slaapkamer Marie
+    icon: mdi:human-child
+    light: group.marie_bedroom_lights
+    temperature: sensor.marie_temperatuur
+    climate: climate.marie
+    humidity: sensor.marie_vochtigheid
+    motion: binary_sensor.speelkamer_marie_home_security_motion_detection
+    door: binary_sensor.bedroom_marie_door
+    page_entities:
+      entities:
+        - entity: input_datetime.slaaptijd_marie
+    more_entities:
+      entities:
+        - entity: automation.speelkamer_marie
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #device: switch.television
+    #vacuum:
+    #  entity: vacuum.rockrobo
+    #  camera: camera.rockrobo_map
+    #plant: plant.hallway_plant
+    media_player: media_player.slaapkamer_marie
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Slaapkamer
+    icon: mdi:bed-outline
+    light: group.slaapkamer_ouders_lights
+    temperature: sensor.slaapkamer_temperatuur
+    climate: climate.master_bedroom
+    humidity: sensor.slaapkamer_vochtigheid
+    #motion:  binary_sensor.speelkamer_marie_home_security_motion_detection
+    door: binary_sensor.bedroom_door_sensor
+    window: cover.velux_straat
+    #safety: sensor.smoke_sensor
+    #device: input_datetime.tablet_alarm
+    cover: cover.slaapkamer_velux_rolluiken
+    media_player: media_player.bedroom
+    more_entities:
+      entities:
+        - entity: input_datetime.tablet_alarm
+    #    - entity: sensor.oven_remaining_program_time
+  #WETROOMS
+  - name: Douche
+    icon: mdi:shower
+    light: light.douche_2
+    temperature: sensor.douche_air_temperature
+    #climate: climate.master_bedroom
+    humidity: sensor.douche_humidity
+    motion: binary_sensor.douche_home_security_motion_detection
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.slaapkamer_velux_rolluiken
+    #media_player: media_player.bedroom
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Badkamer
+    icon: mdi:shower
+    light: light.badkamer
+
+    #temperature: sensor.living_temperatuur
+    #climate: climate.living
+    #humidity: sensor.living_vochtigheid
+    motion: binary_sensor.badkamer_pir_sensor
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #device: switch.television
+    #vacuum:
+    #  entity: vacuum.rockrobo
+    #  camera: camera.rockrobo_map
+    #plant: plant.hallway_plant
+    media_player: media_player.bathroom
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Gastentoilet
+    icon: mdi:toilet
+    light: light.toilet
+    #temperature: sensor.douche_air_temperature
+    #climate: climate.master_bedroom
+    #humidity: sensor.douche_humidity
+    #motion:  binary_sensor.toilet_gasten_pir_sensor
+    door: binary_sensor.guest_toilet_door
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.slaapkamer_velux_rolluiken
+    #media_player: media_player.bedroom
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Poolhouse
+    icon: mdi:home-variant-outline
+    #light: light.luster_mezzanine
+    #temperature: sensor.kantoor_temperatuur
+    #climate: climate.master_bedroom
+    #humidity: sensor.kantoor_vochtigheid
+    #motion: binary_sensor.motion_terras
+    #door: binary_sensor.basement_door_sensor
+    #window: binary_sensor.mezzanine_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.orangery_sun_blinds
+    #media_player: media_player.kantoor
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+    addons:
+      - name: Zwembad
+        icon: mdi:pool
+        path: "dwains-dashboard/addons/rooms/courtyard/pool/page.yaml"
+        button_path: "dwains-dashboard/addons/rooms/courtyard/pool/button.yaml"
+        data:
+          pool:
+            - entity: sensor.spa_temperature
+              name: Pool Temperature
+            - entity: sensor.spa_last_measurement
+              name: Last Measurement
+            - entity: sensor.spa_orp
+              name: ORP Value
+            - entity: sensor.spa_orp_status
+              name: ORP Status
+            - entity: sensor.spa_ph
+              name: PH Value
+            - entity: sensor.spa_ph_status
+              name: PH Status
+            - entity: switch.pool
+              name: Pool Pump
+            - entity: sensor.poolpump_on_today
+              name: Pool runtime
+            - entity: sensor.pool_energy_yesterday
+              name: Pool energy yesterday
+            - entity: sensor.pool_energy_today
+              name: Pool energy
+            - entity: binary_sensor.pool_robot
+              name: Pool Robot
+            - entity: script.force_blue_update
+              name: Request updated values
+      - name: Jacuzzi
+        icon: mdi:hot-tub
+        path: "dwains-dashboard/addons/rooms/courtyard/pool/page.yaml"
+        button_path: "dwains-dashboard/addons/rooms/courtyard/pool/button.yaml"
+        data:
+          pool:
+            - entity: sensor.spa_temperature
+              name: Pool Temperature
+            - entity: sensor.spa_last_measurement
+              name: Last Measurement
+            - entity: sensor.spa_orp
+              name: ORP Value
+            - entity: sensor.spa_orp_status
+              name: ORP Status
+            - entity: sensor.spa_ph
+              name: PH Value
+            - entity: sensor.spa_ph_status
+              name: PH Status
+            - entity: switch.pool
+              name: Pool Pump
+            - entity: sensor.poolpump_on_today
+              name: Pool runtime
+            - entity: sensor.pool_energy_yesterday
+              name: Pool energy yesterday
+            - entity: sensor.pool_energy_today
+              name: Pool energy
+            - entity: script.force_blue_update
+              name: Request updated values
+
+  #OTHER ROOMS
+  - name: Kelder
+    icon: mdi:home-floor-negative-1
+    light: light.basement
+    temperature: sensor.kelder_temperatuur
+    #climate: climate.master_bedroom
+    humidity: sensor.kelder_vochtigheid
+    #motion: binary_sensor.motion_terras
+    door: binary_sensor.basement_door_sensor
+    #window: binary_sensor.mezzanine_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.orangery_sun_blinds
+    #media_player: media_player.kantoor
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+  - name: Mezzanine
+    icon: mdi:home-floor-1
+    light: light.luster_mezzanine
+    temperature: sensor.mezzanine_temperature
+    #climate: climate.master_bedroom
+    humidity: sensor.mezzanine_humidity
+    #motion: binary_sensor.motion_terras
+    #door: binary_sensor.office_door_sensor
+    window: binary_sensor.mezzanine_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.orangery_sun_blinds
+    #media_player: media_player.kantoor
+    #more_entities:
+    #  entities:
+    #    - entity: sensor.oven_duration
+    #    - entity: sensor.oven_remaining_program_time
+    page_entities:
+      entities:
+        - entity: switch.radiator_mezzaninne
+  #OUTSIDE
+  - name: Terras
+    icon: mdi:nature-people
+    #light: light.toilet
+    temperature: sensor.garage_temperatuur
+    #climate: climate.master_bedroom
+    humidity: sensor.garage_vochtigheid
+    motion: binary_sensor.motion_terras
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.slaapkamer_velux_rolluiken
+    media_player: media_player.pool
+  - name: Tuinhuis
+    icon: mdi:home
+    light: light.gardenshed_main
+    #temperature: sensor.garage_temperatuur
+    #climate: climate.master_bedroom
+    #humidity: sensor.garage_vochtigheid
+    #motion: binary_sensor.motion_terras
+    #door: binary_sensor.hallway_door_contact
+    #window:  binary_sensor.terras_sliding_window_sensor
+    #safety: sensor.smoke_sensor
+    #cover: cover.slaapkamer_velux_rolluiken
+    #media_player: media_player.pool
+    page_entities:
+      entities:
+        - entity: light.gardenshed_accent
+        - entity: light.playground
+        - entity: light.gardenshed_ledstrip
+
+  - name: Garage
+    icon: mdi:garage
+    #light: light.luster_mezzanine
+    temperature: sensor.garage_temperatuur
+    humidity: sensor.garage_vochtigheid
+    cover: cover.garage_door

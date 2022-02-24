@@ -1,255 +1,459 @@
-- trigger:
-    platform: time
-    at: '19:20:00'
-  action:
-    service: light.turn_on
-    entity_id: light.tradfri_bulb_e27_ws_opal_980lm_3
-    data:
-      transition: 900
-  alias: Morning wake up
-  id: eaa60920c2754160b313dbf8f564425b
-- action:
-  - data:
-      language: nl
-      message: Welkom thuis Kristel, Ik hoop dat je een leuke dag hebt gehad!
-    service: tts.google_say
-    entity_id: media_player.bathroom
-  alias: Kristel komt thuis
-  condition:
-  - condition: state
-    entity_id: media_player._ue55es6300
-    state: 'off'
-  - condition: state
-    entity_id: media_player.playroom
-    state: 'off'
-  id: '1519147879498'
+- id: '1588859264777'
+  alias: Mazout - Force FullUp Refresh
+  description: ''
   trigger:
-  - entity_id: device_tracker.84b153e4f5e9
-    from: not_home
-    platform: state
-    to: home
-- action:
-  - data:
-      message: Fuck it is cold in the basement
-    service: notify.ios_iphonejurgen
-  alias: Te koud in de kelder
+  - event: start
+    platform: homeassistant
   condition: []
-  id: '1519431488726'
+  action:
+  - data: {}
+    entity_id: sensor.fullup
+    service: homeassistant.update_entity
+- id: '1591182041031'
+  alias: Sun - Velux - Front
+  description: ''
   trigger:
-  - below: '5'
-    entity_id: sensor.basement_temperature
+  - entity_id: binary_sensor.sun_on_velux_front
+    from: 'false'
+    platform: state
+    to: 'true'
+  condition: []
+  action:
+  - scene: scene.velux_sun_front_roof
+- id: '1591182110755'
+  alias: Sun - Velux - Back
+  description: ''
+  trigger:
+  - entity_id: scene.velux_sun_back_roof
+    from: 'false'
+    platform: state
+    to: 'true'
+  condition: []
+  action:
+  - scene: scene.velux_sun_back_roof
+- id: '1591186182297'
+  initial_state: true
+  alias: Ventilation - Bedroom
+  description: ''
+  trigger:
     platform: numeric_state
-- action:
-  - data:
-      entity_id: switch.verwarming
-    service: switch.turn_on
-  alias: Verwarming keuken aan
+    entity_id: weather.pastorale
+    value_template: '{{ state.attributes.temperature }}'
+    above: 15
+    below: 21
   condition:
-  - below: '19'
-    condition: numeric_state
-    entity_id: sensor.kitchen_temperature
-  - condition: template
-    value_template: '{% if now().hour > 5 and now().hour < 23 %}true{% endif %}'
-  id: '1519681837475'
+    condition: or
+    conditions:
+    - condition: time
+      after: '10:00:00'
+      before: '12:00:00'
+    - condition: time
+      after: '21:00:00'
+      before: '22:30:00'
+  action:
+  - service: scene.turn_on
+    entity_id: scene.bedroom_ventilation_big
+  - service: notify.mobile_app_iphone
+    data:
+      message: De slaapkamer wordt nu geventileerd
+  - service: notify.mobile_app_iphone_van_kristel
+    data:
+      message: De slaapkamer wordt nu geventileerd
+- id: '1591186182298'
+  initial_state: true
+  alias: Ventilation - Bedroom - Einde
+  description: ''
   trigger:
   - platform: time
-    minutes: /1
-    seconds: 0
-- action:
-  - data:
-      entity_id: switch.verwarming
-    service: switch.turn_off
-  alias: Verwarming keuken uit
-  condition: []
-  id: '1519682083455'
+    at: '12:00:00'
+  - platform: time
+    at: '22:30:00'
+  action:
+  - service: scene.turn_on
+    entity_id: scene.bedroom_ventilation_small
+  - service: notify.mobile_app_iphone
+    data:
+      message: Einde ventilatie slaapkamer
+  - service: notify.mobile_app_iphone_van_kristel
+    data:
+      message: Einde ventilatie slaapkamer
+- id: '1597331851202'
+  alias: Monstera watering
+  description: ''
   trigger:
-  - above: '21'
-    entity_id: sensor.kitchen_temperature
-    platform: numeric_state
-- action:
+  - below: 15
+    device_id: 7988726852144526880f8565d3ae1bd2
+    domain: sensor
+    entity_id: sensor.monstera_vochtigheid
+    platform: device
+    type: value
+  condition: []
+  action:
   - data:
-      entity_id: media_player.tv
-    service: media_player.turn_off
-  alias: check of tv nog aan staat en zet m uit
+      data:
+        message: Hey, Monstera op kantoor hier, ik heb dorst!
+        title: Ik heb dorst!
+    service: notify.mobile_app_iphone_van_kristel
+- id: '1614953676148'
+  alias: Automatisch licht speelkamer Marie
+  description: Automatisch licht speelkamer Marie
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.speelkamer_marie_home_security_motion_detection
+      light_target:
+        entity_id: light.speelkamer_marie
+- id: '1616756833249'
+  alias: CLIMATE - KITCHEN - WINDOW OPEN
+  description: When window open, stop heating
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.terras_sliding_window_sensor
+    to: 'on'
+    for: 00:02:00
   condition:
   - condition: state
-    entity_id: media_player.tv
-    state: 'on'
-  id: '1519684335894'
+    entity_id: climate.living
+    state: heating
+  action:
+  - service: climate.turn_off
+    target:
+      entity_id: climate.living
+  - service: dwains_dashboard.notification_create
+    data:
+      message: Verwarming af, raam staat open
+      notification_id: climate_living
+  mode: single
+- id: '1616872241245'
+  alias: CLIMATE - KITCHEN - WINDOW CLOSED
+  description: ''
   trigger:
-  - at: 00:00
-    platform: time
-- action:
-  - data:
-      entity_id: group.kitchen_lights
-    service: switch.turn_off
-  - data:
-      entity_id: media_player.playroom
-    service: media_player.media_stop
-  alias: switch off kitchen lights when tv off at night
-  condition:
-  - after: '20:00'
-    condition: time
-  id: '1521486165631'
-  trigger:
-  - entity_id: media_player.tv
-    from: 'on'
-    platform: state
+  - platform: state
+    entity_id: binary_sensor.terras_sliding_window_sensor
     to: 'off'
-- action:
-  - data:
-      entity_id: light.tradfri_bulb_e27_ws_opal_980lm_2
-    service: light.turn_off
-  alias: morning bathroom prep
-  condition:
-  - before: '15:30'
-    condition: time
-  id: '1522148187835'
-  trigger:
-  - entity_id: media_player.bathroom
-    from: playing
-    platform: state
-    to: paused
-- id: '1531988181633'
-  alias: Door Bell
-  trigger:
-  - entity_id: switch.frontdoor_bell
-    from: 'off'
-    platform: state
-    to: 'on'
-  condition: []
-  action:
-  - data:
-      message: Someone at the door
-    service: notify.ios_iphonejurgen
-- id: '1534248427037'
-  alias: Stop James when Door is open
-  trigger:
-  - entity_id: binary_sensor.office_door
-    from: closed
-    platform: state
-    to: open
+    for: 00:00:20
   condition:
   - condition: state
-    entity_id: vacuum.james
+    entity_id: climate.living
+    state: 'off'
+  action:
+  - service: climate.turn_on
+    target:
+      entity_id: climate.living
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.kitchen
+      message: Dank je om het venster dicht te doen, ik zet de verwarming weer aan.
+  - service: dwains_dashboard.notification_dismiss
+    data:
+      notification_id: climate_living
+  mode: single
+- id: '1617256736775'
+  alias: Bathroom - Lights - V2
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light_with_condition.yaml
+    input:
+      motion_entity: binary_sensor.badkamer_pir_sensor
+      light_target:
+        entity_id: light.badkamer
+      no_motion_wait: 10
+      no_deactivation_entity: media_player.bathroom
+      no_deactivation_state: playing
+- id: '1624137462284'
+  alias: velux bug
+  description: 'Reboot velux when ha reboots '
+  trigger:
+  - platform: homeassistant
+    event: shutdown
+  condition: []
+  action:
+  - service: velux.reboot_gateway
+  mode: single
+- id: Marie Remote A
+  alias: Marie Remote A
+  trigger:
+    platform: state
+    entity_id: binary_sensor.marie_remote_a
+    to: 'on'
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.slaapkamer_marie
+- id: Marie Remote A Long Press
+  alias: Marie Remote A Long Press
+  trigger:
+    platform: state
+    entity_id: binary_sensor.marie_remote_a
+    to: 'on'
+    for: 00:00:03
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.slaapkamer_marie
+  - delay:
+      milliseconds: 200
+  - service: light.toggle
+    data:
+      entity_id: light.slaapkamer_marie
+  - delay:
+      milliseconds: 200
+  - service: light.toggle
+    data:
+      entity_id: light.slaapkamer_marie
+  - delay:
+      milliseconds: 200
+  - service: light.toggle
+    data:
+      entity_id: light.slaapkamer_marie
+  - service: timer.start
+    entity_id: timer.kamer_marie
+- id: Marie Remote B
+  alias: Marie Remote B
+  trigger:
+    platform: state
+    entity_id: binary_sensor.marie_remote_b
+    to: 'on'
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.speelkamer_marie
+- id: Marie Remote C
+  alias: Marie Remote C
+  trigger:
+    platform: state
+    entity_id: binary_sensor.marie_remote_c
+    to: 'on'
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.600194956ea9_192_168_1_245
+- id: Marie Remote D
+  alias: Marie Remote D
+  trigger:
+    platform: state
+    entity_id: binary_sensor.marie_remote_d
+    to: 'on'
+  action:
+  - service: light.toggle
+    data:
+      entity_id: light.toilet_guests
+- id: '1634748166712'
+  alias: slaapgaan ritueel
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.bedroom_door_sensor
+    id: slaapkamerdeur
+  condition:
+  - condition: state
+    entity_id: binary_sensor.quiet_time
     state: 'on'
   action:
-  - data:
-      entitity_id: vacuum.james
-    service: vacuum.turn_off
-- id: '1535556871451'
-  alias: James changes status
+  - service: cover.close_cover
+    target:
+      entity_id: cover.rolluiken_slaapkamer_boven
+  mode: single
+- id: '1634749920428'
+  alias: Slaapgaan ritueel Marie
+  description: ''
   trigger:
-  - entity_id: sensor.james_status
-    platform: state
-  condition: []
-  action:
-  - data:
-      message: 'James says: {{ sensor.james_status }}'
-    service: notify.ios_iphonejurgen
-- id: '1535656975175'
-  alias: Enable passage light when first floor door opens and is dark
-  trigger:
-  - entity_id: binary_sensor.office_door
-    platform: state
-    to: 'on'
-  - entity_id: binary_sensor.maries_bedroom
-    platform: state
-    to: 'on'
-  condition: []
-  action:
-  - data:
-      entity_id: switch.passage_light
-    service: switch.turn_on
-- id: '1535798616340'
-  alias: Switch Off Passage Light After Delay
-  trigger:
-  - entity_id: switch.passage_light
-    from: 'off'
-    platform: state
-    to: 'on'
-  condition: []
-  action:
-  - data:
-      entity_id: script.1535797410021
-    service: script.turn_on
-- id: '1535798616341'
-  alias: Switch Off Living Front Light After Delay
-  trigger:
-  - entity_id: switch.living_front_light
-    from: 'off'
-    platform: state
-    to: 'on'
-  condition: []
-  action:
-  - data:
-      entity_id: script.1535797410022
-    service: script.turn_on
-- id: '1536006362180'
-  alias: Rain / Velux
-  trigger:
-  - entity_id: sensor.pws_weather
-    platform: state
-    to: rainy
+  - platform: state
+    entity_id: binary_sensor.bedroom_marie_door
   condition:
-  - condition: state
-    entity_id: group.velux_windows
-    state: 'On'
-  action:
-  - data:
-      entity_id: light.tradfri_bulb_e27_ws_opal_980lm
-    service: light.turn_on
-- id: '1537899764510'
-  alias: Tessie Start Charging Weekdays
-  trigger:
-  - at: '21:05'
-    platform: time
-  condition:
-  - condition: zone
-    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
-    zone: zone.home
   - condition: time
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
+    after: '19:30'
   action:
-  - data:
-      entity_id: switch.tesla_model_s_5yjsa7e26jf260737_charger_switch
-    service: switch.turn_on
-- id: '1537899764511'
-  alias: Tessie Stop Charging Weekdays
+  - service: light.turn_on
+    target:
+      entity_id: light.600194956ea9_192_168_1_245
+    data:
+      color_name: red
+      brightness_pct: 20
+  mode: single
+- id: '1635155663783'
+  alias: Dampkap verlichting aan tijdens koken
+  description: ''
   trigger:
-  - at: 05:55
-    platform: time
-  condition:
-  - condition: zone
-    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
-    zone: zone.home
-  - condition: time
-    weekday:
-    - mon
-    - tue
-    - wed
-    - thu
-    - fri
+  - platform: device
+    type: turned_on
+    device_id: 5d556a93bf314963a28cd715170532b6
+    entity_id: switch.kookplaat_power
+    domain: switch
+  condition: []
   action:
-  - data:
-      entity_id: switch.tesla_model_s_5yjsa7e26jf260737_charger_switch
-    service: switch.turn_off
-- id: '1537902156299'
-  alias: Tessie Weekday Morning Prep
+  - service: light.turn_on
+    target:
+      entity_id: light.dc4f22c06ecb_192_168_1_75
+    data:
+      color_name: white
+      brightness: 255
+      white: 255
+  mode: restart
+- id: '1635187421870'
+  alias: Deur Marie open - waarschuwing
+  description: ''
   trigger:
-  - at: '21:04'
-    platform: time
-  condition:
-  - condition: state
-    entity_id: device_tracker.tesla_model_s_5yjsa7e26jf260737_location_tracker
-    state: Home
+  - platform: state
+    entity_id: binary_sensor.bedroom_marie_door
+    to: 'On'
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 3
+      milliseconds: 0
+    from: 'Off'
+  condition: []
   action:
-  - data:
-      entity_id: climate.tesla_model_s_5yjsa7e26jf260737_hvac_climate_system
-      temperature: 21
-    service: climate.set_temperature
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.slaapkamer_marie
+      message: Deur deur deur
+      language: nl-NL
+      cache: true
+  mode: single
+- id: '1636224064069'
+  alias: slaapkamer licht aan als deur open en avond of velux neer
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.bedroom_door_sensor
+    to: 'On'
+  condition:
+    condition: or
+    conditions:
+    - condition: sun
+      after: sunset
+      after_offset: -01:00:00
+    - condition: state
+      entity_id: cover.slaapkamer_velux_rolluiken
+      state: closed
+  action:
+  - type: turn_on
+    device_id: 70662f86402f2cfaa5281822d3306310
+    entity_id: light.sfeerlamp_slaapkamer
+    domain: light
+    brightness_pct: 80
+  mode: single
+- id: '1636225165943'
+  alias: Kristel gaat slapen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.tablet_device_locked
+    to: 'Off'
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 70662f86402f2cfaa5281822d3306310
+    entity_id: light.sfeerlamp_slaapkamer
+    domain: light
+  action:
+  - type: turn_off
+    device_id: 70662f86402f2cfaa5281822d3306310
+    entity_id: light.sfeerlamp_slaapkamer
+    domain: light
+  mode: single
+- id: '1636408049108'
+  alias: wekker licht kristel
+  description: ''
+  use_blueprint:
+    path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
+    input:
+      light_entity: light.sfeerlamp_slaapkamer
+      timestamp_sensor: sensor.sm_t825_next_alarm
+      post_sunrise_actions:
+      - delay:
+          hours: 0
+          minutes: 10
+          seconds: 0
+          milliseconds: 0
+      - service: cover.open_cover
+        target:
+          entity_id: cover.slaapkamer_velux_rolluiken
+      end_brightness: 245
+- id: '1637599806371'
+  alias: sfeer bij tv kijken
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 5baeb8be83fe4c05adcb95eeba9a6bba
+    domain: media_player
+    entity_id: media_player.living_tv
+    type: playing
+  condition:
+  - condition: sun
+    before: sunset
+    after: sunset
+    after_offset: -01:00:00
+  action:
+  - type: turn_on
+    device_id: 70662f86402f2cfaa5281822d3306310
+    entity_id: light.sfeerlamp_living
+    domain: light
+    brightness_pct: 50
+  mode: single
+- id: '1643098285997'
+  alias: In conf call
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: c4eb1667083aed4eff9ee11c76d3dcca
+    entity_id: binary_sensor.jurgens_macbook_pro_audio_input_in_use
+    domain: binary_sensor
+    id: incall
+  - type: turned_off
+    platform: device
+    device_id: c4eb1667083aed4eff9ee11c76d3dcca
+    entity_id: binary_sensor.jurgens_macbook_pro_audio_input_in_use
+    domain: binary_sensor
+    id: uitcall
+  - type: turned_off
+    platform: device
+    device_id: c4eb1667083aed4eff9ee11c76d3dcca
+    entity_id: binary_sensor.jurgens_macbook_pro_active
+    domain: binary_sensor
+    id: away
+  - type: turned_on
+    platform: device
+    device_id: c4eb1667083aed4eff9ee11c76d3dcca
+    entity_id: binary_sensor.jurgens_macbook_pro_active
+    domain: binary_sensor
+    id: back
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: incall
+        - condition: trigger
+          id: away
+      sequence:
+      - service: media_player.media_pause
+        target:
+          area_id: 7858578f884c4231bd8fc25fa7bdd268
+        data: {}
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: uitcall
+        - condition: and
+          conditions:
+          - condition: trigger
+            id: back
+          - type: is_off
+            condition: device
+            device_id: c4eb1667083aed4eff9ee11c76d3dcca
+            entity_id: binary_sensor.jurgens_macbook_pro_audio_input_in_use
+            domain: binary_sensor
+      sequence:
+      - service: media_player.media_play
+        target:
+          area_id: 7858578f884c4231bd8fc25fa7bdd268
+        data: {}
+    default: []
+  mode: single

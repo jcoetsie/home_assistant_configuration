@@ -1,0 +1,36 @@
+# https://dwainscheeren.github.io/dwains-lovelace-dashboard/configuration/persons.html
+
+# persons: 
+#   - name: Dwain
+#     track: person.dwain
+#     more_entities:
+#       columns: 1 #optional
+#       entities:
+#         - entity: sensor.steps
+#         - entity: sensor.steps
+#     page_entities:
+#       columns: 2 #optional
+#       entities:
+#         - entity: sensor.steps
+#         - entity: sensor.steps
+#     addons:
+#       - name: Test addon
+#         icon: fas:chart-area
+#         path: 'dwains-dashboard/addons/persons/test/test.yaml'
+#         data:
+#           battery_level: sensor.battery_level
+
+persons: 
+  - name: Jurgen
+    track: person.jurgen_coetsiers
+    more_entities:
+      columns: 1 #optional
+      entities:
+        - entity: sensor.iphone_steps_3
+        - entity: sensor.jurgen_work_status
+  - name: Kristel
+    track: person.kristel_bekaert
+    more_entities:
+      columns: 1 #optional
+      entities:
+        - entity: sensor.iphone_van_kristel_steps_3

@@ -1,0 +1,65 @@
+  #AC4A0C Vrij - vroeger douche
+  #1AF20C Voordeur
+  #BDEA8F
+  #36BC83
+  #078A0C Douche
+  #F78A0C Gang
+  #60F20C Bijkeuken
+  #DDD30E Deur kantoor
+  #DDD30A Deur kantoor
+  #48F20C Toilet gasten
+  #08F20C Badkamer
+
+  #via 433 bridge in gang
+
+- platform: mqtt
+  name: "Douche PIR Sensor"
+  payload_on: "078A0C"
+  off_delay: 60
+  device_class: motion
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Gang PIR Sensor"
+  payload_on: "F78A0C"
+  off_delay: 30
+  device_class: motion
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Office Door Sensor"
+  payload_off: "DDD30E"
+  payload_on: "DDD30A"
+  device_class: door
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Toilet Gasten PIR Sensor"
+  payload_on: "48F20C"
+  off_delay: 60
+  device_class: motion
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Voordeur PIR Sensor"
+  payload_on: "1AF20C"
+  off_delay: 10
+  device_class: motion
+  state_topic: "tele/tasmota_CAD1AE/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+#via 433 bridge in bijkeuken
+- platform: mqtt
+  name: "Bijkeuken PIR Sensor"
+  payload_on: "60F20C"
+  off_delay: 60
+  device_class: motion
+  state_topic: "tele/tasmota_B2E966/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+- platform: mqtt
+  name: "Badkamer PIR Sensor"
+  payload_on: "08F20C"
+  off_delay: 60
+  device_class: motion
+  state_topic: "tele/tasmota_B2E966/RESULT"
+  value_template: "{{ value_json.RfReceived.Data }}"
+

@@ -1,0 +1,65 @@
+# dwains_dashboard
+## Room add-on: Pool
+## Created by Jurgen Coetsiers
+## Version: 1.0.0
+
+- type: custom:dwains-flexbox-card
+  items_classes: 'col-xs-12 col-sm-6 col-sm-6'
+  cards:
+    - type: entities
+      style: |
+        ha-card {
+          border-radius: 5px;
+          background-color: var(--dwains-theme-primary);
+        }
+      entities:
+        {{ (data | fromjson)['pool'] }}
+    - type: custom:dwains-flexbox-card
+      items_classes: 'col-xs-12 col-sm-6 col-sm-6'
+      cards:
+        - type: 'custom:mini-graph-card'
+          entities:
+            - sensor.spa_ph
+          hours_to_show: 24
+          color_thresholds:
+            - value: 0
+              color: "#ff0000"
+            - value: 6.6
+              color: "#ff78800"
+            - value: 7.2
+              color: "#04ff00"
+            - value: 7.6
+              color: "#ff78800"
+            - value: 8.4
+              color: "#ff0000"
+              
+        - type: 'custom:mini-graph-card'
+          entities:
+            - sensor.spa_orp
+          hours_to_show: 120
+          color_thresholds:
+            - value: 0
+              color: "#ff0000"
+            - value: 400
+              color: "#ff78800"
+            - value: 650
+              color: "#04ff00"
+            - value: 750
+              color: "#ff78800"
+            - value: 900
+              color: "#ff0000"
+        - type: 'custom:mini-graph-card'
+          entities:
+            - sensor.spa_temperature
+          hours_to_show: 120
+          color_thresholds:
+            - value: 0
+              color: "#ff0000"
+            - value: 5
+              color: "#ff78800"
+            - value: 21
+              color: "#04ff00"
+            - value: 40
+              color: "#ff78800"
+            - value: 50
+              color: "#ff0000"

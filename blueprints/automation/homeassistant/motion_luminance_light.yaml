@@ -1,0 +1,69 @@
+blueprint:
+  name: Motion-activated Light with illuminance check
+  description: Turn on a light when motion is detected if insufficient illuminance
+  domain: automation
+  #source_url: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    illuminance_entity:
+      name: Luminence Sensor
+      selector:
+        entity:
+          domain: sensor
+          device_class: illuminance
+
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    no_motion_wait:
+      name: Wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+    illuminance_treshold:
+      name: Illuminance treshold
+      description: Minimum Illuminance level in Lux (Bathroom (100), Bedroom, Kitchen, Garage (300), Hal (200-500))
+      default: 300
+      selector:
+        number:
+          min: 100
+          max: 500
+          unit_of_measurement: lux
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+trigger:
+  platform: state
+  entity_id: !input motion_entity
+  from: "off"
+  to: "on"
+condition:
+  platform: numeric_state
+  entity_id: !input illuminance_entity
+  below: !input illuminance_treshold
+action:
+  - service: light.turn_on
+    target: !input light_target
+  - wait_for_trigger:
+      platform: state
+      entity_id: !input motion_entity
+      from: "on"
+      to: "off"
+  - delay: !input no_motion_wait
+  - service: light.turn_off
+    target: !input light_target

@@ -1,0 +1,50 @@
+# https://dwainscheeren.github.io/dwains-lovelace-dashboard/configuration/more_page.html
+
+# more_page:
+#   addons:
+#     - name: Hello more page
+#       icon: mdi:chart-bar
+#       path: 'dwains-theme/addons/more_page/hello-more-page/page.yaml'
+#       data:
+#         some_data: 'This is some data parsed.'
+#         some_other_data: 'and some other data.'
+
+more_page:
+  addons:
+    - name: Sonos
+      icon: mdi:speaker
+      main_menu: "true"
+      path: "dwains-dashboard/addons/more_page/sonos/page.yaml"
+      data:
+        platform: sonos
+        speakers:
+          - entity: media_player.kitchen
+            name: Kitchen
+          - entity: media_player.kantoor
+            name: Orangery
+          - entity: media_player.pool
+            name: Pool
+        buttons:
+          - name: VRT Radio 1
+            type: source
+            id: VRT Radio 1
+          - name: VRT Studio Brussel
+            type: source
+            id: VRT Studio Brussel
+          - name: Joe
+            type: source
+            id: Joe
+          - name: My style!
+            #icon: mdi:television
+            type: source
+            id: My style!
+    - name: Ubiquiti UniFi
+      icon: "mdi:router-network"
+      path: "dwains-dashboard/addons/more_page/ubiquiti/unifi.yaml"
+    - name: Afvalwijzer
+      icon: mdi:recycle
+      path: "dwains-dashboard/addons/more_page/afvalwijzer/page.yaml"
+      main_menu: "true"
+      data:
+        wastecollector: ilva_afvalophaling
+        sort_attribute: Sort-date

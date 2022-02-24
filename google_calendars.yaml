@@ -1,92 +1,98 @@
 
+- cal_id: marlin-ops.com_classroomc75d40da@group.calendar.google.com
+  entities:
+  - device_id: test_sectie_test
+    ignore_availability: true
+    name: Test Sectie test
+    track: true
+
 - cal_id: marlin-ops.com_9u8b70hl6840mpr30goo25elss@group.calendar.google.com
   entities:
-  - device_id: holidayssickness
+  - device_id: holidays_sickness
+    ignore_availability: true
     name: Holidays/Sickness
+    track: true
+
+- cal_id: b-sprouts.com_n554k5mkpckqm1jeogu5n9trd8@group.calendar.google.com
+  entities:
+  - device_id: b_sprouts_program_agenda
+    ignore_availability: true
+    name: B-Sprouts Program Agenda
     track: true
 
 - cal_id: jurgen.coetsiers@marlin-ops.com
   entities:
-  - device_id: jurgencoetsiersmarlinopscom
+  - device_id: jurgen_coetsiers_marlin_ops_com
+    ignore_availability: true
     name: jurgen.coetsiers@marlin-ops.com
-    track: false
+    track: true
 
-- cal_id: b-sprouts.com_n554k5mkpckqm1jeogu5n9trd8@group.calendar.google.com
+- cal_id: marlin-ops.com_etf7cliea1o7srghblgrisn38c@group.calendar.google.com
   entities:
-  - device_id: bsprouts_program_agenda
-    name: B-Sprouts Program Agenda
-    track: false
+  - device_id: ilva
+    ignore_availability: true
+    name: ILVA
+    track: true
 
 - cal_id: pascal.binard@marlin-ops.com
   entities:
-  - device_id: pascalbinardmarlinopscom
+  - device_id: pascal_binard_marlin_ops_com
+    ignore_availability: true
     name: pascal.binard@marlin-ops.com
-    track: false
+    track: true
 
 - cal_id: ia56u50g1cb46rvhp8b6q0q084@group.calendar.google.com
   entities:
   - device_id: appartement_zee
+    ignore_availability: true
     name: Appartement Zee
-    track: false
+    track: true
+
+- cal_id: bekaertkristel@gmail.com
+  entities:
+  - device_id: kristelbekaert_yahoo_com
+    ignore_availability: true
+    name: kristelbekaert@yahoo.com
+    track: true
 
 - cal_id: tueae6mj8f6rti4l5kfs4qca9jt8bqfb@import.calendar.google.com
   entities:
   - device_id: leerlingenkalender
+    ignore_availability: true
     name: leerlingenkalender
-    track: false
+    track: true
 
-- cal_id: '#contacts@group.v.calendar.google.com'
+- cal_id: addressbook#contacts@group.v.calendar.google.com
   entities:
   - device_id: contacts
+    ignore_availability: true
     name: Contacts
-    track: false
+    track: true
+
+- cal_id: en.be#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: holidays_in_belgium
+    ignore_availability: true
+    name: Holidays in Belgium
+    track: true
 
 - cal_id: nl.be#holiday@group.v.calendar.google.com
   entities:
   - device_id: feestdagen_in_belgie
+    ignore_availability: true
     name: "Feestdagen in Belgi\xEB"
     track: true
 
 - cal_id: belg2_23967_%41alst#sports@group.v.calendar.google.com
   entities:
   - device_id: aalst
+    ignore_availability: true
     name: Aalst
-    track: false
+    track: true
 
 - cal_id: p#weeknum@group.v.calendar.google.com
   entities:
   - device_id: week_numbers
-    name: Week Numbers
-    track: false
-
-- cal_id: marlin-ops.com_etf7cliea1o7srghblgrisn38c@group.calendar.google.com
-  entities:
-  - device_id: ilva
-    name: ILVA
-    track: true
-  - device_id: PMD
-    name: PMD
-    search: "Ophaling PMD"
-    track: true
-  - device_id: GFT
-    name: GFT
-    search: "Ophaling GFT"
-    track: true
-  - device_id: Glas
-    name: Glas
-    search: "Ophaling Glas"
-    track: true
-  - device_id: Huisvuil
-    name: Huisvuil
-    search: "Ophaling Huisvuil"
-    track: true
-  - device_id: Papier
-    name: Papier
-    search: "Ophaling Papier"
-    track: true
-- cal_id: en.be#holiday@group.v.calendar.google.com
-  entities:
-  - device_id: holidays_in_belgium
     ignore_availability: true
-    name: Holidays in Belgium
+    name: Week Numbers
     track: true
