@@ -168,9 +168,9 @@ spotcast:
       sp_dc: !secret kristel_sp_dc
       sp_key: !secret kristel_sp_key
 nest:
-  client_id: 83751842865-bbgsu1tg1dnq9vpl7vd6i4s4t003okok.apps.googleusercontent.com
-  client_secret: 4WpiF64SDrDCXuXzJv0UrVjH
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
   # "Project ID" in the Device Access Console
-  project_id: 02a0314d-46f0-497a-bd84-2146cd5b751c
+  project_id: !secret nest_project_id
   # Provide the full path exactly as shown under "Subscription name" in Google Cloud Console
-  subscriber_id: projects/home-assistant-308010/subscriptions/Pastorale
+  subscriber_id: !secret nest_subscriber_id
