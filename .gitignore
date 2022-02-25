@@ -6,6 +6,7 @@
 !.gitignore
 !*.md
 !secrets.yaml.example
+!custom_components/*
 # Ignore folders.
 .storage
 .cloud
